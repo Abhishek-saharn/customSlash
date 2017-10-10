@@ -10,7 +10,9 @@ app.use(bodyParser.urlencoded({
 }))
 
 
-
+app.get('/index', (req, res) => {
+    res.sendFile('./index.html');
+})
 
 app.post('/', (req, res) => {
     let text = req.body.text;
