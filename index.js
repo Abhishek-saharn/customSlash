@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({
 
 
 app.get('/index', (req, res) => {
-    res.sendFile('./index.html');
+
+    res.json({"df":"sfsdf"});
 })
 
 app.post('/', (req, res) => {
