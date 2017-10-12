@@ -1,9 +1,5 @@
-import {
-    workstatus
-} from '../api/workStatus'
-import {
-    attachmentsURLs
-} from '../api/attachmentsURLs'
+const workstatus = require('../api/workStatus')
+const attachmentsURLs = require('../api/attachmentsURLs')
 
 
 /**
@@ -39,7 +35,7 @@ export const slashHome = (req, res) => {
         }]
     };
 
-    res.json(data);
+    res.json(req.body);
 }
 
 export const slackAuth = (req, res) => {
