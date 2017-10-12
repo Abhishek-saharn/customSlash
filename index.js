@@ -16,6 +16,7 @@ app.get('/index', (req, res) => {
 })
 
 app.post('/', (req, res) => {
+    let status = "working from home";
     console.log("inside jdkfsjkdhkdshfkhdskfh")
     let text = req.body.text;
 
@@ -25,7 +26,7 @@ app.post('/', (req, res) => {
     }
     let data = {
         response_type: 'in_channel', // public to the channel 
-        text: 'You have entered correct information',
+        text: `${text} is ${status}`,
         attachments: [{
             image_url: 'https://http.cat/302.jpg'
         }]
@@ -51,6 +52,8 @@ app.get('/slack', function (req, res) {
             code: req.query.code
         }
     };
+
+    console.log(">>>>>>><<<<<<<<<<<", data)
     request.post('https://slack.com/api/oauth.access', data, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             // Get an auth token
@@ -67,6 +70,7 @@ app.get('/slack', function (req, res) {
                         res.send('Bot added');
                     } else {
                         console.log(JSON.parse(body))
+                        res.json({"status":"Success"})
                         // let team = JSON.parse(body).team.domain;
                         // res.redirect('http://' + team + '.slack.com');
                     }
