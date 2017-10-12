@@ -1,8 +1,8 @@
-const request = require('request')
-const express = require("express")
-const bodyParser = require("body-parser")
+import request from 'request'
+import express from "express"
+import bodyParser from "body-parser"
 
-const main = require('./routes/main.routes')
+import router from './routes/main.routes'
 
 
 const app = express()
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(main);
+app.use(router);
 
 app.listen(process.env.PORT || 8000, () => {
     console.log("server Listening at", process.env.PORT || 8000)

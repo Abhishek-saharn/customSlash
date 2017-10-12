@@ -1,5 +1,5 @@
-const workstatus = require('../api/workStatus')
-const attachmentsURLs = require('../api/attachmentsURLs')
+import workstatus from '../api/workStatus'
+import attachmentsURLs from '../api/attachmentsURLs'
 
 
 /**
@@ -11,10 +11,6 @@ const attachmentsURLs = require('../api/attachmentsURLs')
 export const indexButton = (req, res) => {
     res.sendFile(`${process.env.PWD}/ui/index.html`);
 }
-
-/**
- * A post request will be created when a user use / 
- */
 
 export const slashHome = (req, res) => {
 
@@ -45,7 +41,10 @@ export const slackAuth = (req, res) => {
     }
 
 
-
+    /**
+     *   If authenticated by user, HTTP request will be having a 'code' as query that can be stored.
+     *   And the stored data will be exchanged with a token. 
+     */
     let data = {
         form: {
             client_id: process.env.SLACK_CLIENT_ID,
@@ -53,8 +52,9 @@ export const slackAuth = (req, res) => {
             code: req.query.code
         }
     };
-
-    console.log(">>>>>>><<<<<<<<<<<", data)
+    /**
+     *  Below data is POSTed to the oauth.access and a token is then stored. 
+     */
     request.post('https://slack.com/api/oauth.access', data, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             // Get an auth token
@@ -71,11 +71,11 @@ export const slackAuth = (req, res) => {
                         res.send('Bot added');
                     } else {
                         console.log(JSON.parse(body))
-                        res.json({
-                            "status": "Success"
-                        })
-                        let team = JSON.parse(body).team.domain;
-                        res.redirect('http://' + team + '.slack.com');
+                        res.json(
+                            JSON.parse(body)
+                        )
+                        // let team = JSON.parse(body).team.domain;
+                        // res.redirect('http://' + team + '.slack.com');
                     }
                 }
             });
