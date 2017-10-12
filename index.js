@@ -16,8 +16,13 @@ app.get('/index', (req, res) => {
 })
 
 app.post('/', (req, res) => {
-    let status = "working from home";
-    console.log("inside jdkfsjkdhkdshfkhdskfh")
+    let workstatus = {
+        "sapna": "working from home",
+        "abhishek": "onsite",
+        "devesh": "offsite",
+        "vinay": "day off",
+    }
+    // console.log("inside jdkfsjkdhkdshfkhdskfh")
     let text = req.body.text;
 
     if (/^\d+$/.test(text)) {
@@ -26,7 +31,7 @@ app.post('/', (req, res) => {
     }
     let data = {
         response_type: 'in_channel', // public to the channel 
-        text: `${text} is ${status}`,
+        text: `${text} is ${workstatus[text]}`,
         attachments: [{
             image_url: 'https://ichef-1.bbci.co.uk/news/660/media/images/75292000/jpg/_75292103_80410876.jpg'
         }]
@@ -70,7 +75,9 @@ app.get('/slack', function (req, res) {
                         res.send('Bot added');
                     } else {
                         console.log(JSON.parse(body))
-                        res.json({"status":"Success"})
+                        res.json({
+                            "status": "Success"
+                        })
                         // let team = JSON.parse(body).team.domain;
                         // res.redirect('http://' + team + '.slack.com');
                     }
