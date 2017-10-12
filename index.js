@@ -36,14 +36,14 @@ app.post('/', (req, res) => {
         res.send('U R DOIN IT WRONG. Enter a text not a number.');
         return;
     }
-    status = workstatus[text];
+    let status = workstatus[text];
     let data = {
         response_type: 'in_channel', // public to the channel 
         text: `${text} is ${status}`,
-        // attachments: [{
+        attachments: [{
 
-        //     image_url: `${attachmentsURLs[status]}`
-        // }]
+            image_url: `${attachmentsURLs[status]}`
+        }]
     };
 
     res.json(data);
