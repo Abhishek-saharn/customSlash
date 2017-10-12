@@ -66,8 +66,9 @@ app.get('/slack', function (req, res) {
                     if (JSON.parse(body).error == 'missing_scope') {
                         res.send('Bot added');
                     } else {
-                        let team = JSON.parse(body).team.domain;
-                        res.redirect('http://' + team + '.slack.com');
+                        console.log(JSON.parse(body))
+                        // let team = JSON.parse(body).team.domain;
+                        // res.redirect('http://' + team + '.slack.com');
                     }
                 }
             });
