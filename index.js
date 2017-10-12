@@ -4,21 +4,22 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const app = express()
 
-app.use(bodyParser.json)
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
 
 
 app.get('/index', (req, res) => {
-
-    res.json({"df":"sfsdf"});
+    res.sendFile(`${process.env.PWD}/index.html`);
+    // res.json({"df":"sfsdf"});
 })
 
-app.post('/', (req, res) => {
+app.get('/',(req, res) => {
+    console.log("inside jdkfsjkdhkdshfkhdskfh")
     let text = req.body.text;
 
-    if (/^\d+$/.test(q.text)) {
+    if (/^\d+$/.test(text)) {
         res.send('U R DOIN IT WRONG. Enter a text not a number.');
         return;
     }
@@ -35,6 +36,6 @@ app.post('/', (req, res) => {
 });
 
 
-const server = app.listen(process.env.PORT || 3000, () => {
-    console.log("server Listening")
+app.listen(process.env.PORT || 8000, () => {
+    console.log("server Listening at" ,process.env.PORT || 8000)
 })
