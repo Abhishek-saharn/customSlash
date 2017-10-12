@@ -35,7 +35,7 @@ export const slashHome = (req, res) => {
         }]
     };
 
-    res.json(req.body);
+    res.json(data.text);
 }
 
 export const slackAuth = (req, res) => {
