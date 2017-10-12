@@ -28,7 +28,7 @@ app.post('/', (req, res) => {
         response_type: 'in_channel', // public to the channel 
         text: `${text} is ${status}`,
         attachments: [{
-            image_url: 'https://http.cat/302.jpg'
+            image_url: 'https://ichef-1.bbci.co.uk/news/660/media/images/75292000/jpg/_75292103_80410876.jpg'
         }]
     };
 
