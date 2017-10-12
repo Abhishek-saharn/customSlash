@@ -40,10 +40,10 @@ app.post('/', (req, res) => {
     let data = {
         response_type: 'in_channel', // public to the channel 
         text: `${text} is ${status}`,
-        attachments: [{
+        // attachments: [{
 
-            image_url: `${attachmentsURLs[status]}`
-        }]
+        //     image_url: `${attachmentsURLs[status]}`
+        // }]
     };
 
     res.json(data);
