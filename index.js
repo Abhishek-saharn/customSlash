@@ -15,7 +15,7 @@ app.get('/index', (req, res) => {
     // res.json({"df":"sfsdf"});
 })
 
-app.get('/',(req, res) => {
+app.post('/', (req, res) => {
     console.log("inside jdkfsjkdhkdshfkhdskfh")
     let text = req.body.text;
 
@@ -36,6 +36,46 @@ app.get('/',(req, res) => {
 });
 
 
+app.get('/slack', function (req, res) {
+    if (!req.query.code) { // access denied
+        res.redirect('/index');
+        return;
+    }
+
+
+
+    let data = {
+        form: {
+            client_id: process.env.SLACK_CLIENT_ID,
+            client_secret: process.env.SLACK_CLIENT_SECRET,
+            code: req.query.code
+        }
+    };
+    request.post('https://slack.com/api/oauth.access', data, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Get an auth token
+            let token = JSON.parse(body).access_token;
+
+            // Get the team domain name to redirect to the team URL after auth
+            request.post('https://slack.com/api/team.info', {
+                form: {
+                    token: token
+                }
+            }, function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    if (JSON.parse(body).error == 'missing_scope') {
+                        res.send('Bot added');
+                    } else {
+                        let team = JSON.parse(body).team.domain;
+                        res.redirect('http://' + team + '.slack.com');
+                    }
+                }
+            });
+        }
+    })
+});
+
+
 app.listen(process.env.PORT || 8000, () => {
-    console.log("server Listening at" ,process.env.PORT || 8000)
+    console.log("server Listening at", process.env.PORT || 8000)
 })
