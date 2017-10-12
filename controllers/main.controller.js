@@ -72,7 +72,7 @@ export const slackAuth = (req, res) => {
                     } else {
                         console.log(JSON.parse(body))
                         res.json({
-                            "code": error
+                            "Status": "Command Added"
                         })
                         // let team = JSON.parse(body).team.domain;
                         // res.redirect('http://' + team + '.slack.com');
