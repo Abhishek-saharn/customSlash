@@ -59,7 +59,7 @@ export const slackAuth = (req, res) => {
         if (!error && response.statusCode == 200) {
             // Get an auth token
             let token = JSON.parse(body).access_token;
-            console.log(">>>>>><<<<<<<<<<", body);
+            console.log(">>>>>><<<<<<<<<<",process.env.SLACK_CLIENT_ID,">>><<<<<", body);
             // Get the team domain name to redirect to the team URL after auth
             request.post('https://slack.com/api/team.info', {
                 form: {
