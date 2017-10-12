@@ -71,9 +71,9 @@ export const slackAuth = (req, res) => {
                         res.send('Bot added');
                     } else {
                         console.log(JSON.parse(body))
-                        res.json(
-                            JSON.parse(body)
-                        )
+                        res.json({
+                            "code": response.statusCode
+                        })
                         // let team = JSON.parse(body).team.domain;
                         // res.redirect('http://' + team + '.slack.com');
                     }
