@@ -27,8 +27,29 @@ export const slashHome = (req, res) => {
         text: `${text} is ${status}`,
         attachments: [{
 
-            image_url: `${attachmentsURLs[status]}`
-        }]
+                image_url: `${attachmentsURLs[status]}`
+            },
+            {
+                "fallback": "Have you aprooved?",
+                "title": "Have you aprooved?",
+                "callback_id": "123xyz",
+                "color": "#3AA3E3",
+                "attachment_type": "default",
+                "actions": [{
+                        "name": "yes",
+                        "text": "Yes",
+                        "type": "button",
+                        "value": "yes"
+                    },
+                    {
+                        "name": "no",
+                        "text": "No",
+                        "type": "button",
+                        "value": "no"
+                    }
+                ]
+            }
+        ]
     };
 
     res.json(data);
