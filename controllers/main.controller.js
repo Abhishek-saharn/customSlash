@@ -80,7 +80,6 @@ export const slackAuth = (req, res) => {
         if (!error && response.statusCode == 200) {
             // Get an auth token
             let token = JSON.parse(body).access_token;
-            // console.log(">>>>>><<<<<<<<<<", process.env.SLACK_CLIENT_ID, ">>><<<<<", process.env.SLACK_CLIENT_SECRET, ">>><<<<<<", body);
             // Get the team domain name to redirect to the team URL after auth
             request.post('https://slack.com/api/team.info', {
                 form: {
@@ -106,14 +105,14 @@ export const slackAuth = (req, res) => {
 
 
 export const approvedAction = (req, res) => {
-    let body = JSON.parse(req.body);
+    let body = req.body;
     let data = {
-        form: {
-            token: body.token,
-            channel: body.channel,
-            text: "New Text",
-            ts: body.message_ts,
-            as_user: ture,
+        // form: {
+        //     token: body.token,
+        //     channel: body.channel,
+        //     text: "New Text",
+        //     ts: body.message_ts,
+        //     as_user: ture,
         }
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
