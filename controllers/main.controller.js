@@ -7,7 +7,7 @@ import request from 'request'
  *    will be shown to user, that will redirect to route "/slack" this same route is also provided in slack app "Oauth" url .
  */
 
-
+let gtoken;
 export const indexButton = (req, res) => {
     res.sendFile(`${process.env.PWD}/ui/index.html`);
 }
@@ -80,6 +80,7 @@ export const slackAuth = (req, res) => {
         if (!error && response.statusCode == 200) {
             // Get an auth token
             let token = JSON.parse(body).access_token;
+            gtoken = token;
             // Get the team domain name to redirect to the team URL after auth
             request.post('https://slack.com/api/team.info', {
                 form: {
@@ -118,14 +119,14 @@ export const approvedAction = (req, res) => {
     let data = {
 
         form: {
-            token: payloadjson.token,
+            token: gtoken,
             channel: payloadjson.channel,
             text: "New Text",
             ts: payloadjson.message_ts,
             as_user: true
         }
     };
-    console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA',data)
+    console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', data)
     request.post('https://slack.com/api/chat.update', {
         data
     }, (error, response, body) => {
