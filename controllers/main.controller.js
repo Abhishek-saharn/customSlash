@@ -137,9 +137,14 @@ export const approvedAction = (req, res) => {
         ts: payloadjson.message_ts,
         as_user: true
     });
-
+    let options = {
+        url: "https://slack.com/api/chat.update",
+        header: {
+            'content-type': 'application/x-www-form-urlencoded'
+        }
+    }
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
-    request.post('https://slack.com/api/chat.update', {
+    request.post(options, {
         qs
     }, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
