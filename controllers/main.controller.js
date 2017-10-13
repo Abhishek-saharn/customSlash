@@ -110,7 +110,7 @@ export const approvedAction = (req, res) => {
     let payloadjson = JSON.parse(req.body.payload);
 
     var message = {
-        "text": actionJSONPayload.user.name+" clicked: "+actionJSONPayload.actions[0].name,
+        "text": payloadjson.user.name+" clicked: "+payloadjson.actions[0].name,
         "replace_original": true
     }
 
