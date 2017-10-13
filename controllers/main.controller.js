@@ -134,7 +134,6 @@ export const approvedAction = (req, res) => {
 
 
 
-    res.json(message)
     // console.log("payload >>>>><<<<<<<<_______________", payloadjson);
     // console.log("payload token >>>>><<<<<<<<_______________", payloadjson.token);
     // console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
