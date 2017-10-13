@@ -113,12 +113,12 @@ export const approvedAction = (req, res) => {
         //     text: "New Text",
         //     ts: body.message_ts,
         //     as_user: ture,
-        }
-    };
-    request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
+    // }
+};
+request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
 
-    });
-    console.log(">>>>><<<<<<<<", data, "_______________", req.body);
-    // res.json(req.body);
+});
+console.log(">>>>><<<<<<<<", data, "_______________", req.body);
+// res.json(req.body);
 
 }
