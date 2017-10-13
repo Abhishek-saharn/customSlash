@@ -131,7 +131,7 @@ export const approvedAction = (req, res) => {
     // };
 
     let qs = querystring.stringify({
-        token: gtoken,
+        token: payloadjson.token,
         channel: payloadjson.channel.id,
         text: "New Text",
         ts: payloadjson.message_ts,
