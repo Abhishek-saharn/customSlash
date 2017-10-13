@@ -116,12 +116,13 @@ export const approvedAction = (req, res) => {
         }
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
+        if (error) console.log("EEERRRROOOORRRRRRR", error);
 
     });
-    console.log("payload >>>>><<<<<<<<_______________", payloadjson);
-    console.log("payload token >>>>><<<<<<<<_______________", payloadjson.token);
-    console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
-    console.log("payload >>>>><<<<<<<<_______________", typeof payloadjson);
+    // console.log("payload >>>>><<<<<<<<_______________", payloadjson);
+    // console.log("payload token >>>>><<<<<<<<_______________", payloadjson.token);
+    // console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
+    // console.log("payload >>>>><<<<<<<<_______________", typeof payloadjson);
     // res.json(req.body);
 
 }
