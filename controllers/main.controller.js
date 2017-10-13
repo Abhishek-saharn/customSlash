@@ -121,7 +121,7 @@ export const approvedAction = (req, res) => {
     console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
     console.log("payload token >>>>><<<<<<<<_______________", req.body.payload.token);
     console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
-    console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
+    console.log("payload >>>>><<<<<<<<_______________", typeof req.body.payload);
     // res.json(req.body);
 
 }
