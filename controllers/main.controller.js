@@ -107,13 +107,13 @@ export const slackAuth = (req, res) => {
 export const approvedAction = (req, res) => {
     let payloadjson = JSON.parse(req.body.payload);
     let data = {
-        form: {
-            token: payloadjson.token,
-            channel: payloadjson.channel,
-            text: "New Text",
-            ts: payloadjson.message_ts,
-            as_user: true
-        }
+
+        token: payloadjson.token,
+        channel: payloadjson.channel,
+        text: "New Text",
+        ts: payloadjson.message_ts,
+        as_user: true
+
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
