@@ -111,14 +111,17 @@ export const approvedAction = (req, res) => {
             token: req.body.payload.token,
             channel: req.body.payload.channel,
             text: "New Text",
-            ts: req.body.message_ts,
+            ts: req.body.payload.message_ts,
             as_user: true
         }
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
 
     });
-    console.log(">>>>><<<<<<<<", data, "_______________", req.body.payload);
+    console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
+    console.log("payload token >>>>><<<<<<<<_______________", req.body.payload.token);
+    console.log("payload keys >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
+    console.log("payload type >>>>><<<<<<<<_______________", typeof req.body.payload);
     // res.json(req.body);
 
 }
