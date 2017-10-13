@@ -115,7 +115,11 @@ export const approvedAction = (req, res) => {
         as_user: true
 
     };
-    request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
+    request.post('https://slack.com/api/chat.update', {
+        form: {
+            token: payloadjson.token
+        }
+    }, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
         console.log("BBBOOOODDDYYYY", body);
     });
