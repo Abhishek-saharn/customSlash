@@ -119,7 +119,7 @@ export const approvedAction = (req, res) => {
     let data = {
 
         form: {
-            token: gtoken,
+            token: payloadjson.token,
             channel: payloadjson.channel,
             text: "New Text",
             ts: payloadjson.message_ts,
