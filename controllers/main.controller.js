@@ -112,7 +112,7 @@ export const approvedAction = (req, res) => {
             channel: body.channel,
             text: "New Text",
             ts: body.message_ts,
-            as_user: ture
+            as_user: true
         }
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
