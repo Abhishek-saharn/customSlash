@@ -26,6 +26,6 @@ router.route('/slack').get(slackAuth);
 router.route('/index').get(indexButton);
 
 
-router.route('/approvedAction').get(approvedAction);
+router.route('/approvedAction').post(approvedAction);
 
 export default router;
