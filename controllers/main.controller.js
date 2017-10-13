@@ -108,20 +108,20 @@ export const approvedAction = (req, res) => {
     let payloadjson = JSON.parse(req.body.payload);
     let data = {
         form: {
-            token: req.body.payload.token,
-            channel: req.body.payload.channel,
+            token: payloadjson.token,
+            channel: payloadjson.channel,
             text: "New Text",
-            ts: req.body.payload.message_ts,
+            ts: payloadjson.message_ts,
             as_user: true
         }
     };
     request.post('https://slack.com/api/chat.update', data, (error, response, body) => {
 
     });
-    console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
-    console.log("payload token >>>>><<<<<<<<_______________", req.body.payload.token);
+    console.log("payload >>>>><<<<<<<<_______________", payloadjson);
+    console.log("payload token >>>>><<<<<<<<_______________", payloadjson.token);
     console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
-    console.log("payload >>>>><<<<<<<<_______________", typeof req.body.payload);
+    console.log("payload >>>>><<<<<<<<_______________", typeof payloadjson);
     // res.json(req.body);
 
 }
