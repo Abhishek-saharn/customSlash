@@ -101,3 +101,14 @@ export const slackAuth = (req, res) => {
         }
     });
 }
+
+
+
+
+export const approvedAction = (req,res) => {
+    
+    
+    console.log(">>>>><<<<<<<<",req.body);
+    res.json(req.body);
+
+}

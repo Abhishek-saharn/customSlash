@@ -5,7 +5,8 @@ import {
 import {
     slashHome,
     indexButton,
-    slackAuth
+    slackAuth,
+    approvedAction
 } from '../controllers/main.controller.js'
 
 const router = new Router()
@@ -23,5 +24,8 @@ router.route('/slack').get(slackAuth);
  *  A "Add to slack button" is will be shown in /index
  */
 router.route('/index').get(indexButton);
+
+
+router.route('/approvedAction').get(approvedAction);
 
 export default router;
