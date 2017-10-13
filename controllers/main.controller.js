@@ -1,6 +1,7 @@
-import workstatus from '../api/workStatus'
-import attachmentsURLs from '../api/attachmentsURLs'
-import request from 'request'
+import workstatus from '../api/workStatus';
+import attachmentsURLs from '../api/attachmentsURLs';
+import request from 'request';
+import querystring from 'querystring';
 
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button an auth page 
@@ -116,17 +117,28 @@ export const approvedAction = (req, res) => {
     }
 
 
-    let data = {
+    // let data = {
 
-        form: {
-            token: payloadjson.token,
-            channel: payloadjson.channel,
-            text: "New Text",
-            ts: payloadjson.message_ts,
-            as_user: true
-        }
-    };
-    console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', data)
+
+    //     // token=my-token-here&channel=#channel-name-or-id&text=Text here.&username=otherusername
+    //     form: {
+    //         token: payloadjson.token,
+    //         channel: payloadjson.channel,
+    //         text: "New Text",
+    //         ts: payloadjson.message_ts,
+    //         as_user: true
+    //     }
+    // };
+
+    let qs = querystring.stringify({
+        token: payloadjson.token,
+        channel: payloadjson.channel,
+        text: "New Text",
+        ts: payloadjson.message_ts,
+        as_user: true
+    });
+
+    console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
     request.post('https://slack.com/api/chat.update', {
         data
     }, (error, response, body) => {
