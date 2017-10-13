@@ -108,8 +108,8 @@ export const approvedAction = (req, res) => {
 
     let data = {
         form: {
-            token: req.body.token,
-            channel: req.body.channel,
+            token: req.body.payload.token,
+            channel: req.body.payload.channel,
             text: "New Text",
             ts: req.body.message_ts,
             as_user: true
