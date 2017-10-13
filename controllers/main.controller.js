@@ -105,13 +105,13 @@ export const slackAuth = (req, res) => {
 
 
 export const approvedAction = (req, res) => {
-    let body = req.body;
+
     let data = {
         form: {
-            token: body.token,
-            channel: body.channel,
+            token: req.body.token,
+            channel: req.body.channel,
             text: "New Text",
-            ts: body.message_ts,
+            ts: req.body.message_ts,
             as_user: true
         }
     };
