@@ -132,7 +132,7 @@ export const approvedAction = (req, res) => {
 
     let qs = querystring.stringify({
         token: payloadjson.token,
-        channel: payloadjson.channel,
+        channel: payloadjson.channel.id,
         text: "New Text",
         ts: payloadjson.message_ts,
         as_user: true
