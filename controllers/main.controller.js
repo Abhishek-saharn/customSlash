@@ -105,7 +105,7 @@ export const slackAuth = (req, res) => {
 
 
 export const approvedAction = (req, res) => {
-
+    let payloadjson = JSON.parse(req.body);
     let data = {
         form: {
             token: req.body.payload.token,
@@ -120,8 +120,8 @@ export const approvedAction = (req, res) => {
     });
     console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
     console.log("payload token >>>>><<<<<<<<_______________", req.body.payload.token);
-    console.log("payload keys >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
-    console.log("payload type >>>>><<<<<<<<_______________", typeof req.body.payload);
+    console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
+    console.log("payload >>>>><<<<<<<<_______________", req.body.payload);
     // res.json(req.body);
 
 }
