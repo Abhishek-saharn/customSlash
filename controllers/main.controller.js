@@ -129,7 +129,7 @@ export const approvedAction = (req, res) => {
     //         as_user: true
     //     }
     // };
-    let attachmentsS = JSON.stringify([{
+    let attachmentsS = {
         "fallback": "Have you aprooved?",
         "title": "Thankyou for responding",
         "text": `You have just responded with a ${payloadjson.actions[0].value}`,
@@ -137,7 +137,7 @@ export const approvedAction = (req, res) => {
         "color": "#3AA3E3",
         "attachment_type": "default",
 
-    }])
+    })
 
     // let qs = querystring.stringify({
     //     token: gtoken,
