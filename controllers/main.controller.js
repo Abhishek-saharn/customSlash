@@ -164,20 +164,20 @@ export const approvedAction = (req, res) => {
             }
         ]
     };
-}
 
-const option = {
-    url: payloadjson.response_url,
-    body: attachmentSS,
-    json: true,
-    method: 'post'
-}
 
-request(option, (error, response, body) => {
-    console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-    console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
-    console.log("BBBBOOOOOOODDDDYYYY", body);
-})
+    const option = {
+        url: payloadjson.response_url,
+        body: attachmentSS,
+        json: true,
+        method: 'post'
+    }
+
+    request(option, (error, response, body) => {
+        console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
+        console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
+        console.log("BBBBOOOOOOODDDDYYYY", body);
+    })
 
 
 
