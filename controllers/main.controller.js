@@ -142,7 +142,8 @@ export const approvedAction = (req, res) => {
         text: "",
         // ts: payloadjson.message_ts,
         as_user: false,
-        attachments: attachmentsS
+        attachments: attachmentsS,
+        username:pinpoint
     });
 
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
