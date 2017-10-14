@@ -149,15 +149,31 @@ export const approvedAction = (req, res) => {
     });
 
 
-    request.post(payloadjson.response_url, {
+    const option = {
+        url: payloadjson.response_url,
+        body: {
+            "text": "XXXXXX"
+        },
+        json: true,
+        method: true
+    }
 
-        "text": "Hello"
-
-    }, (error, response, body) => {
+    request(option, (error, response, body) => {
         console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
         console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
         console.log("BBBBOOOOOOODDDDYYYY", body);
-    });
+    })
+
+
+    // request.post(payloadjson.response_url, {
+
+    //     "text": "Hello"
+
+    // }, (error, response, body) => {
+    //     console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
+    //     console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
+    //     console.log("BBBBOOOOOOODDDDYYYY", body);
+    // });
 
     // console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
 
