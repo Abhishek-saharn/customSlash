@@ -141,7 +141,7 @@ export const approvedAction = (req, res) => {
         channel: payloadjson.channel.id,
         text: "",
         // ts: payloadjson.message_ts,
-        as_user: true,
+        as_user: false,
         attachments: attachmentsS
     });
 
