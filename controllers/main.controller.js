@@ -112,7 +112,7 @@ export const approvedAction = (req, res) => {
     const IP = req.ip;
     console.log("<<<<<>>>>>>>>>>>IIIPPP", IP);
 
-    console.log('>>>>>>>><<<<<<<<<<<<<<<<<<<<<<', geoip.lookup("207.97.227.239"));
+    console.log('>>>>>>>><<<<<<<<<<<<<<<<<<<<<<', geoip.lookup("182.74.233.94"));
 
     let payloadjson = JSON.parse(req.body.payload);
 
