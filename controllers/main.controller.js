@@ -132,7 +132,7 @@ export const approvedAction = (req, res) => {
     let attachmentsS = JSON.stringify([{
         "fallback": "Have you aprooved?",
         "title": "Thankyou for responding",
-        "callback_id": "123xyz",
+        "callback_id": payloadjson.callback_id,
         "color": "#3AA3E3",
         "attachment_type": "default",
 
@@ -140,7 +140,7 @@ export const approvedAction = (req, res) => {
     let qs = querystring.stringify({
         token: gtoken,
         channel: payloadjson.channel.id,
-        text: "New Text",
+        text: "",
         ts: payloadjson.message_ts,
         as_user: false,
         attachments: attachmentsS
