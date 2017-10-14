@@ -131,23 +131,23 @@ export const approvedAction = (req, res) => {
     // };
     let attachmentsS = JSON.stringify([{
         "fallback": "Have you aprooved?",
-        "title": "Thankyou for your response!",
+        "title": "Thankyou for responding",
         "callback_id": "123xyz",
         "color": "#3AA3E3",
-        "attachment_type": "default"
+        "attachment_type": "default",
+
     }])
     let qs = querystring.stringify({
-        token: process.env.SLACK_ACCESS_TOKEN,
+        token: gtoken,
         channel: payloadjson.channel.id,
-        text: "",
-        // ts: payloadjson.message_ts,
+        text: "New Text",
+        ts: payloadjson.message_ts,
         as_user: true,
-        attachments: attachmentsS,
-        username: "pinpoint"
+        attachments: attachmentsS
     });
 
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
-    request.post('https://slack.com/api/chat.postMessage?' + qs, (error, response, body) => {
+    request.post('https://slack.com/api/chat.update?' + qs, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
         console.log("BBBOOOODDDYYYY", body, "<<<<<<<>>>>>>>>>>>>>>", payloadjson.token);
     });
