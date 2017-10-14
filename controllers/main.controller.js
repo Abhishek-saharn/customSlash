@@ -153,15 +153,15 @@ export const approvedAction = (req, res) => {
         token: process.env.SLACK_ACCESS_TOKEN,
         channel: payloadjson.channel.id,
         text: "New Text",
-        ts: payloadjson.message_ts,
+        // ts: payloadjson.message_ts,
         as_user: true,
         attachments: attachmentsS
     });
 
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
-    request.post('https://slack.com/api/chat.update?' + qs, (error, response, body) => {
+    request.post('https://slack.com/api/chat.postMessage?' + qs, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
-        console.log("BBBOOOODDDYYYY", body,"<<<<<<<>>>>>>>>>>>>>>", payloadjson.token );
+        console.log("BBBOOOODDDYYYY", body, "<<<<<<<>>>>>>>>>>>>>>", payloadjson.token);
     });
 
 
