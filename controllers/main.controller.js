@@ -129,70 +129,55 @@ export const approvedAction = (req, res) => {
     //         as_user: true
     //     }
     // };
-    let attachmentsS = JSON.stringify([{
-        "fallback": "Have you aprooved?",
-        "title": "Thankyou for responding",
-        "text": `You have just responded with a ${payloadjson.actions[0].value}`,
-        "callback_id": payloadjson.callback_id,
-        "color": "#3AA3E3",
-        "attachment_type": "default",
+    // let attachmentsS = JSON.stringify([{
+    //     "fallback": "Have you aprooved?",
+    //     "title": "Thankyou for responding",
+    //     "text": `You have just responded with a ${payloadjson.actions[0].value}`,
+    //     "callback_id": payloadjson.callback_id,
+    //     "color": "#3AA3E3",
+    //     "attachment_type": "default",
 
-    }])
+    // }])
 
-    let qs = querystring.stringify({
-        token: gtoken,
-        channel: payloadjson.channel.id,
-        text: "",
-        ts: payloadjson.message_ts,
-        as_user: false,
-        attachments: attachmentsS
-    });
-
-
-    const option = {
-        url: payloadjson.response_url,
-        body: {
-
-            "fallback": "Have you aprooved?",
-            "title": "Thankyou for responding",
-            "text": `You have just responded with a ${payloadjson.actions[0].value}`,
-            "callback_id": payloadjson.callback_id,
-            "color": "#3AA3E3",
-            "attachment_type": "default",
-
-
-        },
-        json: true,
-        method: 'post'
-    }
-
-    request(option, (error, response, body) => {
-        console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-        console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
-        console.log("BBBBOOOOOOODDDDYYYY", body);
-    })
-
-
-    // request.post(payloadjson.response_url, {
-
-    //     "text": "Hello"
-
-    // }, (error, response, body) => {
-    //     console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-    //     console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
-    //     console.log("BBBBOOOOOOODDDDYYYY", body);
+    // let qs = querystring.stringify({
+    //     token: gtoken,
+    //     channel: payloadjson.channel.id,
+    //     text: "",
+    //     ts: payloadjson.message_ts,
+    //     as_user: false,
+    //     attachments: attachmentsS
     // });
 
-    // console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
+    const attachmentSS = {
+        text: `${text} is ${status}`,
+        attachments: [{
 
+                image_url: `${attachmentsURLs[status]}`
+            },
+            {
+                "fallback": "Have you aprooved?",
+                "title": `Thankyou for responding with a ${payloadjson.actions[0].value}`,
+                "callback_id": "123xyz",
+                "color": "#3AA3E3",
+                "attachment_type": "default",
 
-    // request.post('https://slack.com/api/chat.postMessage?' + qs, (error, response, body) => {
-    //     if (error) console.log("EEERRRROOOORRRRRRR", error);
+            }
+        ]
+    };
+}
 
-    //     console.log("BBBOOOODDDYYYY", body, "<<<<<<<>>>>>>>>>>>>>>", payloadjson.token);
+const option = {
+    url: payloadjson.response_url,
+    body: attachmentSS,
+    json: true,
+    method: 'post'
+}
 
-    // });
-
+request(option, (error, response, body) => {
+    console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
+    console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
+    console.log("BBBBOOOOOOODDDDYYYY", body);
+})
 
 
 
