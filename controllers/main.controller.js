@@ -129,7 +129,7 @@ export const approvedAction = (req, res) => {
     //         as_user: true
     //     }
     // };
-    let attachmentsS = JSON.stringify({
+    let attachmentsS = JSON.stringify([{
         "fallback": "Have you aprooved?",
         "title": "Have you aprooved?",
         "callback_id": "123xyz",
@@ -148,7 +148,7 @@ export const approvedAction = (req, res) => {
                 "value": "no"
             }
         ]
-    })
+    }])
     let qs = querystring.stringify({
         token: process.env.SLACK_ACCESS_TOKEN,
         channel: payloadjson.channel.id,
