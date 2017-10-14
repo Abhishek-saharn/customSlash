@@ -155,7 +155,7 @@ export const approvedAction = (req, res) => {
             "text": "XXXXXX"
         },
         json: true,
-        method: true
+        method: 'post'
     }
 
     request(option, (error, response, body) => {
