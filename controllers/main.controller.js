@@ -149,10 +149,10 @@ export const approvedAction = (req, res) => {
     // });
 
     const attachmentSS = {
-        text: `${text} is ${status}`,
-        attachments: [{
+        "text": `${text} is ${status}`,
+        "attachments": [{
 
-                image_url: `${attachmentsURLs[status]}`
+                "image_url": `${attachmentsURLs[status]}`
             },
             {
                 "fallback": "Have you aprooved?",
