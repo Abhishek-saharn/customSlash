@@ -129,15 +129,15 @@ export const approvedAction = (req, res) => {
     //         as_user: true
     //     }
     // };
-    // let attachmentsS = JSON.stringify([{
-    //     "fallback": "Have you aprooved?",
-    //     "title": "Thankyou for responding",
-    //     "text": `You have just responded with a ${payloadjson.actions[0].value}`,
-    //     "callback_id": payloadjson.callback_id,
-    //     "color": "#3AA3E3",
-    //     "attachment_type": "default",
+    let attachmentsS = JSON.stringify([{
+        "fallback": "Have you aprooved?",
+        "title": "Thankyou for responding",
+        "text": `You have just responded with a ${payloadjson.actions[0].value}`,
+        "callback_id": payloadjson.callback_id,
+        "color": "#3AA3E3",
+        "attachment_type": "default",
 
-    // }])
+    }])
 
     // let qs = querystring.stringify({
     //     token: gtoken,
@@ -148,27 +148,11 @@ export const approvedAction = (req, res) => {
     //     attachments: attachmentsS
     // });
 
-    const attachmentSS = {
-        "text": `${text} is ${status}`,
-        "attachments": [{
-
-                "image_url": `${attachmentsURLs[status]}`
-            },
-            {
-                "fallback": "Have you aprooved?",
-                "title": `Thankyou for responding with a ${payloadjson.actions[0].value}`,
-                "callback_id": "123xyz",
-                "color": "#3AA3E3",
-                "attachment_type": "default",
-
-            }
-        ]
-    };
 
 
     const option = {
         url: payloadjson.response_url,
-        body: attachmentSS,
+        body: attachmentsS,
         json: true,
         method: 'post'
     }
