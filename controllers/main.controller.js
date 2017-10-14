@@ -135,9 +135,9 @@ export const approvedAction = (req, res) => {
         "text": `You have just responded with a ${payloadjson.actions[0].value}`,
         "callback_id": payloadjson.callback_id,
         "color": "#3AA3E3",
-        "attachment_type": "default",
+        "attachment_type": "default"
 
-    })
+    }
 
     // let qs = querystring.stringify({
     //     token: gtoken,
