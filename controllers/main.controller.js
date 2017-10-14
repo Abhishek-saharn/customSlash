@@ -159,9 +159,8 @@ export const approvedAction = (req, res) => {
 
     request.post({
         url: payloadjson.response_url,
-        body: attachmentsS,
         json: true
-    }, (error, response, body) => {
+    }, attachmentsS, (error, response, body) => {
         console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
         console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
         console.log("BBBBOOOOOOODDDDYYYY", body);
