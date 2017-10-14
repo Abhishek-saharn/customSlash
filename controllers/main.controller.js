@@ -150,7 +150,7 @@ export const approvedAction = (req, res) => {
         ]
     })
     let qs = querystring.stringify({
-        token: xoxp-252772026273-253227229283-255666911280-b9358e18e93aed9f712e94947ef629b5,
+        token: 'xoxp-252772026273-253227229283-255666911280-b9358e18e93aed9f712e94947ef629b5',
         channel: payloadjson.channel.id,
         text: "New Text",
         ts: payloadjson.message_ts,
