@@ -150,12 +150,12 @@ export const approvedAction = (req, res) => {
 
 
     request.post(payloadjson.response_url, {
-        form: {
-            "text": "Hello"
-        }
+
+        "text": "Hello"
+
     }, (error, response, body) => {
-        console.log("ERRRRRRR", error);
-        console.log("RRRRESPOOONNNNSSEE", response);
+        console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
+        console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
         console.log("BBBBOOOOOOODDDDYYYY", body);
     });
 
