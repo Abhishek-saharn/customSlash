@@ -131,23 +131,10 @@ export const approvedAction = (req, res) => {
     // };
     let attachmentsS = JSON.stringify([{
         "fallback": "Have you aprooved?",
-        "title": "Have you aprooved?",
+        "title": "Thankyou for your response!",
         "callback_id": "123xyz",
         "color": "#3AA3E3",
-        "attachment_type": "default",
-        "actions": [{
-                "name": "yes",
-                "text": "Yes",
-                "type": "button",
-                "value": "yes"
-            },
-            {
-                "name": "no",
-                "text": "No",
-                "type": "button",
-                "value": "no"
-            }
-        ]
+        "attachment_type": "default"
     }])
     let qs = querystring.stringify({
         token: process.env.SLACK_ACCESS_TOKEN,
