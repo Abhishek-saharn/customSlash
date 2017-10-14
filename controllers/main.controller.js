@@ -139,7 +139,7 @@ export const approvedAction = (req, res) => {
     let qs = querystring.stringify({
         token: process.env.SLACK_ACCESS_TOKEN,
         channel: payloadjson.channel.id,
-        text: "New Text",
+        text: "",
         // ts: payloadjson.message_ts,
         as_user: true,
         attachments: attachmentsS
