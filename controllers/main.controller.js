@@ -148,22 +148,28 @@ export const approvedAction = (req, res) => {
         attachments: attachmentsS
     });
 
-    console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
 
-
-    request.post('https://slack.com/api/chat.postMessage?' + qs, (error, response, body) => {
-        if (error) console.log("EEERRRROOOORRRRRRR", error);
-
-        console.log("BBBOOOODDDYYYY", body, "<<<<<<<>>>>>>>>>>>>>>", payloadjson.token);
-
+    request.post(payloadjson.response_url, {
+        form: {
+            "text": "Hello"
+        }
+    }, (error, response, body) => {
+        console.log("ERRRRRRR", error);
+        console.log("RRRRESPOOONNNNSSEE", response);
+        console.log("BBBBOOOOOOODDDDYYYY", body);
     });
 
+    // console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
 
 
-    // console.log("payload >>>>><<<<<<<<_______________", payloadjson);
-    // console.log("payload token >>>>><<<<<<<<_______________", payloadjson.token);
-    // console.log("payload >>>>><<<<<<<<_______________", Object.keys(req.body.payload));
-    // console.log("payload >>>>><<<<<<<<_______________", typeof payloadjson);
-    // res.json(req.body);
+    // request.post('https://slack.com/api/chat.postMessage?' + qs, (error, response, body) => {
+    //     if (error) console.log("EEERRRROOOORRRRRRR", error);
+
+    //     console.log("BBBOOOODDDYYYY", body, "<<<<<<<>>>>>>>>>>>>>>", payloadjson.token);
+
+    // });
+
+
+
 
 }
