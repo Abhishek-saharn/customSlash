@@ -129,19 +129,39 @@ export const approvedAction = (req, res) => {
     //         as_user: true
     //     }
     // };
-
+    let attachmentsS = JSON.stringify({
+        "fallback": "Have you aprooved?",
+        "title": "Have you aprooved?",
+        "callback_id": "123xyz",
+        "color": "#3AA3E3",
+        "attachment_type": "default",
+        "actions": [{
+                "name": "yes",
+                "text": "Yes",
+                "type": "button",
+                "value": "yes"
+            },
+            {
+                "name": "no",
+                "text": "No",
+                "type": "button",
+                "value": "no"
+            }
+        ]
+    })
     let qs = querystring.stringify({
-        token: payloadjson.token,
+        token: xoxp-252772026273-253227229283-255666911280-b9358e18e93aed9f712e94947ef629b5,
         channel: payloadjson.channel.id,
         text: "New Text",
         ts: payloadjson.message_ts,
-        as_user: true
+        as_user: true,
+        attachments: attachmentsS
     });
 
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
     request.post('https://slack.com/api/chat.update?' + qs, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
-        console.log("BBBOOOODDDYYYY", body);
+        console.log("BBBOOOODDDYYYY", body); 
     });
 
 
