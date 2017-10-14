@@ -136,7 +136,7 @@ export const approvedAction = (req, res) => {
         "callback_id": payloadjson.callback_id,
         "color": "#3AA3E3",
         "attachment_type": "default",
-        "replace_original": true
+        "replace_original": false
 
     }
 
@@ -161,7 +161,7 @@ export const approvedAction = (req, res) => {
     request.post({
         url: payloadjson.response_url,
         json: true,
-        body:attachmentsS
+        body: attachmentsS
     }, (error, response, body) => {
         console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
         console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
