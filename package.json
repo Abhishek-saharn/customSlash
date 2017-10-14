@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "geoip-lite": "^1.2.1",
     "querystring": "^0.2.0",
     "request": "^2.83.0"
   },

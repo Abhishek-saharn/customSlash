@@ -2,7 +2,7 @@ import workstatus from '../api/workStatus';
 import attachmentsURLs from '../api/attachmentsURLs';
 import request from 'request';
 import querystring from 'querystring';
-
+import geoip from 'geoip-lite';
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button an auth page 
  *    will be shown to user, that will redirect to route "/slack" this same route is also provided in slack app "Oauth" url .
@@ -109,26 +109,17 @@ export const slackAuth = (req, res) => {
 export const approvedAction = (req, res) => {
     res.status(200).end()
 
+    const IP = req.ip;
+    console.log("<<<<<>>>>>>>>>>>IIIPPP", IP);
+
+    console.log('>>>>>>>><<<<<<<<<<<<<<<<<<<<<<', geoip.lookup(IP));
+
     let payloadjson = JSON.parse(req.body.payload);
 
     var message = {
         "text": payloadjson.user.name + " clicked: " + payloadjson.actions[0].name,
         "replace_original": true
     }
-
-
-    // let data = {
-
-
-    //     // token=my-token-here&channel=#channel-name-or-id&text=Text here.&username=otherusername
-    //     form: {
-    //         token: payloadjson.token,
-    //         channel: payloadjson.channel,
-    //         text: "New Text",
-    //         ts: payloadjson.message_ts,
-    //         as_user: true
-    //     }
-    // };
     let attachmentsS = {
         "fallback": "Have you aprooved?",
         "title": "Thankyou for responding",
@@ -136,35 +127,18 @@ export const approvedAction = (req, res) => {
         "callback_id": payloadjson.callback_id,
         "color": "#3AA3E3",
         "attachment_type": "default",
-        "replace_original": false
+        "replace_original": true
 
     }
-
-    // let qs = querystring.stringify({
-    //     token: gtoken,
-    //     channel: payloadjson.channel.id,
-    //     text: "",
-    //     ts: payloadjson.message_ts,
-    //     as_user: false,
-    //     attachments: attachmentsS
-    // });
-
-
 
     const option = {
         url: payloadjson.response_url,
         body: attachmentsS,
-        json: true,
-        method: 'post'
+        json: true
     }
 
-    request.post({
-        url: payloadjson.response_url,
-        json: true,
-        body: attachmentsS
-    }, (error, response, body) => {
+    request.post(options, (error, response, body) => {
         console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-        console.log("<<<<<<<<<>>>>>>>>>>RRRRESPOOONNNNSSEE", response);
         console.log("BBBBOOOOOOODDDDYYYY", body);
     })
 
