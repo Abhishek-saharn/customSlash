@@ -152,7 +152,15 @@ export const approvedAction = (req, res) => {
     const option = {
         url: payloadjson.response_url,
         body: {
-            "text": "XXXXXX"
+
+            "fallback": "Have you aprooved?",
+            "title": "Thankyou for responding",
+            "text": `You have just responded with a ${payloadjson.actions[0].value}`,
+            "callback_id": payloadjson.callback_id,
+            "color": "#3AA3E3",
+            "attachment_type": "default",
+
+
         },
         json: true,
         method: 'post'
