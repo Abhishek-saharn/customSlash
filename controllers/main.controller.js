@@ -150,7 +150,7 @@ export const approvedAction = (req, res) => {
         ]
     })
     let qs = querystring.stringify({
-        token: 'xoxb-257404703751-2f9clzhpFbtPdFaSMiyV5QB0',
+        token: process.env.SLACK_ACCESS_TOKEN,
         channel: payloadjson.channel.id,
         text: "New Text",
         ts: payloadjson.message_ts,
@@ -161,7 +161,7 @@ export const approvedAction = (req, res) => {
     console.log('DDDDDDDDDDAAAAAAAAAAATTTTTTTAAAAAAA', qs)
     request.post('https://slack.com/api/chat.update?' + qs, (error, response, body) => {
         if (error) console.log("EEERRRROOOORRRRRRR", error);
-        console.log("BBBOOOODDDYYYY", body); 
+        console.log("BBBOOOODDDYYYY", body);
     });
 
 
