@@ -16,13 +16,25 @@ TeamsSchema.statics = {
             access_token: data.token
         }
         return new Promise((resolve, reject) => {
-            this.create(dataToken)
-                .then((data) => {
-                    return resolve(data)
+            const that = this;
+            this.findOne({
+
+                    team_id: data.team_id
                 })
-                .catch(error => {
-                    return reject(error);
+                .then(data => {
+                    if (!data) {
+
+                        that.create(dataToken)
+                            .then((data) => {
+                                return resolve(data)
+                            })
+                            .catch(error => {
+                                return reject(error);
+                            })
+                    }
                 })
+                .catch(error => reject(error))
+
 
         });
 
