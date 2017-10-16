@@ -117,7 +117,7 @@ export const slackAuth = (req, res) => {
 
             request.post('https://slack.com/api/users.list', {
                 form: {
-                    token: gtoken
+                    token: token
                 }
             }, (error, response, body) => {
                 const body_json = JSON.parse(body);
