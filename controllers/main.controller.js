@@ -61,7 +61,7 @@ export const slashHome = (req, res) => {
                 }
             ]
         };
-
+        console.log("<<<<>>>>><<<<<<>>>>>>", data.attachments)
         displayMessage(req.body.response_url, data)
     }
 }
