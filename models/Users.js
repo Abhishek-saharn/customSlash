@@ -22,7 +22,10 @@ UserSchema.statics = {
 
             this.insertMany(users)
                 .then(data => resolve(data))
-                .catch(err => reject(err));
+                .catch(err=>{
+                    console.log('EERRRRRRRRRRRRRRRRRROOOOOOOORRRRRRR',err)
+                    return err => reject(err)
+                });
 
         });
     }
