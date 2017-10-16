@@ -147,7 +147,7 @@ export const slackAuth = (req, res) => {
 
                 });
 
-                Users.insertMany(users)
+                Users.insertManyUsers(users)
                     .then(data => console.log("Datatata GOT AFTER INSERT MANY", data))
                     .catch(err => console.log(err));
 

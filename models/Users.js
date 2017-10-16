@@ -17,13 +17,13 @@ const UserSchema = new Schema({
 });
 
 UserSchema.statics = {
-    insertMany: function (users) {
+    insertManyUsers: function (users) {
         return new Promise((resolve, reject) => {
 
             this.insertMany(users)
                 .then(data => resolve(data))
-                .catch(err=>{
-                    console.log('EERRRRRRRRRRRRRRRRRROOOOOOOORRRRRRR',err)
+                .catch(err => {
+                    console.log('EERRRRRRRRRRRRRRRRRROOOOOOOORRRRRRR', err)
                     return err => reject(err)
                 });
 
