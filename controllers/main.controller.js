@@ -127,6 +127,10 @@ export const slackAuth = (req, res) => {
                 const members = body_json.members;
 
                 members.forEach((user) => {
+
+                    if (user.is_bot === true) return
+
+
                     let user_data = {
                         "user_id": user.id,
                         "user_team_id": user.team_id,
