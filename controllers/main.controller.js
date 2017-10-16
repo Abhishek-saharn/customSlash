@@ -3,6 +3,10 @@ import attachmentsURLs from '../api/attachmentsURLs';
 import request from 'request';
 import querystring from 'querystring';
 import geoip from 'geoip-lite';
+import {
+    displayMessage
+} from '../utils/misc';
+
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button an auth page 
  *    will be shown to user, that will redirect to route "/slack" this same route is also provided in slack app "Oauth" url .
@@ -15,45 +19,53 @@ export const indexButton = (req, res) => {
 
 export const slashHome = (req, res) => {
 
+    res.status(200).end();
 
-    let text = req.body.text;
+    if (req.body.token !== process.env.SLACK_VERIFICATION_TOKEN) {
+        res.status(403).end("FORBIDDEN");
+    } else {
+        const text = req.body.text;
+        const response_url = req.body.response_url;
+        if (/^\d+$/.test(text)) {
+            res.send('You are Enterning number. Which is under development phase');
+            return;
+        }
+        let status = workstatus[text];
+        let data = {
+            response_type: 'in_channel', // public to the channel 
+            text: `${text} is ${status}`,
+            attachments: [{
 
-    if (/^\d+$/.test(text)) {
-        res.send('You are Enterning a number. Which is under development phase');
-        return;
+                    image_url: `${attachmentsURLs[status]}`
+                },
+                {
+                    "fallback": "Have you aprooved?",
+                    "title": "Have you aprooved?",
+                    "callback_id": "123xyz",
+                    "color": "#3AA3E3",
+                    "attachment_type": "default",
+                    "actions": [{
+                            "name": "yes",
+                            "text": "Yes",
+                            "type": "button",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "no",
+                            "text": "No",
+                            "type": "button",
+                            "value": "no"
+                        }
+                    ]
+                }
+            ]
+        };
+
+
+        res.displayMessage(response_url, data);
+
     }
-    let status = workstatus[text];
-    let data = {
-        response_type: 'in_channel', // public to the channel 
-        text: `${text} is ${status}`,
-        attachments: [{
 
-                image_url: `${attachmentsURLs[status]}`
-            },
-            {
-                "fallback": "Have you aprooved?",
-                "title": "Have you aprooved?",
-                "callback_id": "123xyz",
-                "color": "#3AA3E3",
-                "attachment_type": "default",
-                "actions": [{
-                        "name": "yes",
-                        "text": "Yes",
-                        "type": "button",
-                        "value": "yes"
-                    },
-                    {
-                        "name": "no",
-                        "text": "No",
-                        "type": "button",
-                        "value": "no"
-                    }
-                ]
-            }
-        ]
-    };
-
-    res.json(data);
 }
 
 export const slackAuth = (req, res) => {
@@ -109,38 +121,34 @@ export const slackAuth = (req, res) => {
 export const approvedAction = (req, res) => {
     res.status(200).end()
 
-    const IP = req.ip;
-    console.log("<<<<<>>>>>>>>>>>IIIPPP", IP);
 
-    console.log('>>>>>>>><<<<<<<<<<<<<<<<<<<<<<', geoip.lookup("182.74.233.94"));
 
     let payloadjson = JSON.parse(req.body.payload);
 
-    var message = {
-        "text": payloadjson.user.name + " clicked: " + payloadjson.actions[0].name,
-        "replace_original": true
-    }
-    let attachmentsS = {
-        "fallback": "Have you aprooved?",
-        "title": "Thankyou for responding",
-        "text": `You have just responded with a ${payloadjson.actions[0].value}`,
-        "callback_id": payloadjson.callback_id,
-        "color": "#3AA3E3",
-        "attachment_type": "default",
-        "replace_original": true
+    if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
+        res.status(403).end("ACCESS FORBIDDEN");
+    } else {
+
+        var message = {
+            "text": payloadjson.user.name + " clicked: " + payloadjson.actions[0].name,
+            "replace_original": true
+        }
+        let attachmentsS = {
+            "fallback": "Have you aprooved?",
+            "title": "Thankyou for responding",
+            "text": `You have just responded with a ${payloadjson.actions[0].value}`,
+            "callback_id": payloadjson.callback_id,
+            "color": "#3AA3E3",
+            "attachment_type": "default",
+            "replace_original": true
+
+        }
+
+        displayMessage(payloadjson.response_url, attachmentsS);
+
 
     }
 
-    const options = {
-        url: payloadjson.response_url,
-        body: attachmentsS,
-        json: true
-    }
-
-    request.post(options, (error, response, body) => {
-        console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-        console.log("BBBBOOOOOOODDDDYYYY", body);
-    })
 
 
 

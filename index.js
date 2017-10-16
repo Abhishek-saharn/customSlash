@@ -1,4 +1,3 @@
-
 import express from "express"
 import bodyParser from "body-parser"
 
@@ -13,6 +12,8 @@ app.use(bodyParser.urlencoded({
 }))
 
 app.use(router);
+
+app.use(express.static(__dirname + '/public'));
 
 app.listen(process.env.PORT || 8000, () => {
     console.log("server Listening at", process.env.PORT || 8000)
