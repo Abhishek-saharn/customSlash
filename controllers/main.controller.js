@@ -23,6 +23,8 @@ export const indexButton = (req, res) => {
 
 export const slashHome = (req, res) => {
 
+    res.status(200).end();
+
     if (req.body.token != process.env.SLACK_VERIFICATION_TOKEN) {
         console.log(payloadjson.token, '<<<<<<>>>>>>>>>>>>IIIIIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFF', process.env.SLACK_VERIFICATION_TOKEN);
         res.status(403).end("ACCESS FORBIDDEN");
