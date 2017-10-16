@@ -163,14 +163,7 @@ export const approvedAction = (req, res) => {
 
     } else {
 
-
         console.log("GGOOOOOTTTT THE TOKEN", gtoken);
-
-
-        var message = {
-            "text": payloadjson.user.name + " clicked: " + payloadjson.actions[0].name,
-            "replace_original": true
-        }
         let attachmentsS = {
             "fallback": "Have you aprooved?",
             "title": "Thankyou for responding",
@@ -182,7 +175,13 @@ export const approvedAction = (req, res) => {
 
         }
 
-
+        request.post('https://slack.com/api/users.list', {
+            form: {
+                token: gtoken
+            }
+        }, (error, response, body) => {
+            console.log('????//////?????????????///////////????', body);
+        });
 
         displayMessage(payloadjson.response_url, attachmentsS);
 
