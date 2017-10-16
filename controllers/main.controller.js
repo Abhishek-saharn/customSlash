@@ -10,6 +10,7 @@ import {
 } from '../utils/misc';
 
 import Teams from '../models/Teams';
+import Users from '../models/Users'
 
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button an auth page 
