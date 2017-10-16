@@ -19,45 +19,51 @@ export const indexButton = (req, res) => {
 
 export const slashHome = (req, res) => {
 
+    if (req.body.token != process.env.SLACK_VERIFICATION_TOKEN) {
+        console.log(payloadjson.token, '<<<<<<>>>>>>>>>>>>IIIIIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFF', process.env.SLACK_VERIFICATION_TOKEN);
+        res.status(403).end("ACCESS FORBIDDEN");
+    } else {
 
-    let text = req.body.text;
+        let text = req.body.text;
 
-    if (/^\d+$/.test(text)) {
-        res.send('You are Enterning number. Which is under development phase');
-        return;
+
+        if (/^\d+$/.test(text)) {
+            res.send('You are Enterning number. Which is under development phase');
+            return;
+        }
+        let status = workstatus[text];
+        let data = {
+            response_type: 'in_channel', // public to the channel 
+            text: `${text} is ${status}`,
+            attachments: [{
+
+                    image_url: `${attachmentsURLs[status]}`
+                },
+                {
+                    "fallback": "Have you aprooved?",
+                    "title": "Have you aprooved?",
+                    "callback_id": "123xyz",
+                    "color": "#3AA3E3",
+                    "attachment_type": "default",
+                    "actions": [{
+                            "name": "yes",
+                            "text": "Yes",
+                            "type": "button",
+                            "value": "yes"
+                        },
+                        {
+                            "name": "no",
+                            "text": "No",
+                            "type": "button",
+                            "value": "no"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        displayMessage(req.body.response_url, data)
     }
-    let status = workstatus[text];
-    let data = {
-        response_type: 'in_channel', // public to the channel 
-        text: `${text} is ${status}`,
-        attachments: [{
-
-                image_url: `${attachmentsURLs[status]}`
-            },
-            {
-                "fallback": "Have you aprooved?",
-                "title": "Have you aprooved?",
-                "callback_id": "123xyz",
-                "color": "#3AA3E3",
-                "attachment_type": "default",
-                "actions": [{
-                        "name": "yes",
-                        "text": "Yes",
-                        "type": "button",
-                        "value": "yes"
-                    },
-                    {
-                        "name": "no",
-                        "text": "No",
-                        "type": "button",
-                        "value": "no"
-                    }
-                ]
-            }
-        ]
-    };
-
-    res.json(data);
 }
 
 export const slackAuth = (req, res) => {
