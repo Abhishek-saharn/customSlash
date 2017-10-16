@@ -117,8 +117,10 @@ export const approvedAction = (req, res) => {
 
     let payloadjson = JSON.parse(req.body.payload);
 
+
+
     if (payloadjson.token != process.env.SLACK_VERIFICATION_TOKEN) {
-        console.log('<<<<<<>>>>>>>>>>>>IIIIIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFF');
+        console.log(payloadjson.token, '<<<<<<>>>>>>>>>>>>IIIIIIIIIIIIIIFFFFFFFFFFFFFFFFFFFFF', process.env.SLACK_VERIFICATION_TOKEN);
         res.status(403).end("ACCESS FORBIDDEN");
     } else {
 
