@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     user_id: String,
     user_team_id: String,
     name: String,
-    email: String,
+    email: {type:String,unique:true},
     tz: String,
     is_bot: Boolean,
     is_admin: Boolean
