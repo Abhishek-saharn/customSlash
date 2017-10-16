@@ -183,11 +183,11 @@ export const approvedAction = (req, res) => {
             }
         }, (error, response, body) => {
             const body_json = JSON.parse(body);
-            body_json.forEach((user) => {
-                console.log("TTTTHHHHHIIIIIISSSS ISSSS AAAA UUSSEERR::::::::::::::", user);
-            });
-            // console.log('????//////?????????????///////////????', typeof body_json);
-            // console.log('????//////?????????????///////////????', .length);
+            // body_json.forEach((user) => {
+            //     console.log("TTTTHHHHHIIIIIISSSS ISSSS AAAA UUSSEERR::::::::::::::",user);
+            // });
+            console.log('????//////?????????????///////////????', typeof body_json);
+            console.log('????//////?????????????///////////????', body_json.length);
 
         });
 
