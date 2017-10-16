@@ -80,7 +80,6 @@ export const slashHome = (req, res) => {
                 }
             ]
         };
-        console.log("<<<<>>>>><<<<<<>>>>>>", data.attachments)
         displayMessage(req.body.response_url, data)
     }
 }
@@ -147,7 +146,7 @@ export const slackAuth = (req, res) => {
 
                 });
 
-                Users.insertManyUsers(users)
+                Users.insertManyUsers(users)    
                     .then(data => console.log("Datatata GOT AFTER INSERT MANY", data))
                     .catch(err => console.log(err));
 
