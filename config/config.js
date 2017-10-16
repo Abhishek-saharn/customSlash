@@ -1,3 +1,3 @@
 export default {
-    'database': 'mongodb://localhost/slashPinpoint'
+    'database': 'mongodb://root:root@ds119685.mlab.com:19685/slashpinpoint'
 }
