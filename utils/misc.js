@@ -4,11 +4,10 @@ export function displayMessage(response_url, message) {
 
     const options = {
         uri: response_url,
-        json: true,
+        json: message,
         headers: {
             'Content-type': 'application/json'
-        },
-        body: message
+        }
     }
 
     request.post(options, (error, response, body) => {
