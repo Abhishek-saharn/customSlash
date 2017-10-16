@@ -20,7 +20,7 @@ UserSchema.statics = {
     insertManyUsers: function (users) {
         return new Promise((resolve, reject) => {
 
-            this.insertMany(users)
+          return  this.insertMany(users)
                 .then(data => resolve(data))
                 .catch(err => {
                     console.log('EERRRRRRRRRRRRRRRRRROOOOOOOORRRRRRR', err)
