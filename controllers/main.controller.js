@@ -109,7 +109,47 @@ export const slackAuth = (req, res) => {
         if (!error && response.statusCode == 200) {
             // Get an auth token
             const token = JSON.parse(body).access_token;
-            // gtoken = token;
+
+            /**
+             * Get All the users and add them to Db.
+             */
+
+            request.post('https://slack.com/api/users.list', {
+                form: {
+                    token: gtoken
+                }
+            }, (error, response, body) => {
+                const body_json = JSON.parse(body);
+
+                let users = [];
+                let user_id, user_team_id, name, email, tz, is_bot, is_admin;
+                const members = body_json.members;
+
+                members.forEach((user) => {
+                    let user_data = {
+                        "user_id": user.id,
+                        "user_team_id": user.team_id,
+                        "name": user.profile.real_name || (user.profile.first_name + user.profile.last_name) || user.profile.display_name,
+                        "email": user.profile.email,
+                        "tz": user.tz,
+                        "is_bot": user.is_bot,
+                        "is_admin": user.is_admin
+                    }
+
+                    console.log("DDATATA TTOO BBEE PUUSSHHEEDD ", user_data);
+
+                    // users.push(user_data);
+
+                });
+
+                Users.insertMany(user)
+                    .then(data => console.log("Datatata GOT AFTER INSERT MANY", data))
+                    .catch(err => console.log(err));
+
+
+            });
+
+
             // Get the team domain name to redirect to the team URL after auth
             request.post('https://slack.com/api/team.info', {
                 form: {
@@ -177,20 +217,7 @@ export const approvedAction = (req, res) => {
 
         }
 
-        request.post('https://slack.com/api/users.list', {
-            form: {
-                token: gtoken
-            }
-        }, (error, response, body) => {
-            const body_json = JSON.parse(body);
-            body_json.members.forEach((user) => {
-                console.log("TTTTHHHHHIIIIIISSSS ISSSS AAAA UUSSEERR::::::::::::::", user);
-            });
-            console.log('????//////?????????????///////////????', typeof body_json.members);
-            console.log('????//////?????????????///////////????', body_json.members);
-            // console.log('????//////?????????????///////////????', body);
 
-        });
 
         displayMessage(payloadjson.response_url, attachmentsS);
 
