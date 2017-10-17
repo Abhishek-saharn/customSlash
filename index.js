@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   Teams.findAll()
     .then(all => {
       allMembers = all;
-      console.log(allMembers);
+      console.log(":::::::::::::::::::::::::", allMembers);
       next();
     })
     .catch(error => next(error));
