@@ -23,10 +23,13 @@ app.use(bodyParser.urlencoded({
 }));
 export let allMembers;
 app.use((req, res, next) => {
-  Teams.findAll().then(all => {
-    allMembers = all;
-    console.log(allMembers);
-  }).catch(error => next(error));
+  Teams.findAll()
+    .then(all => {
+      allMembers = all;
+      console.log(allMembers);
+      return next();
+    })
+    .catch(error => next(error));
   next();
 });
 
