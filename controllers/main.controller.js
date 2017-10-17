@@ -112,7 +112,7 @@ export const slackAuth = (req, res) => {
             /**
              * Get All the users and add them to Db.
              */
-
+            let users = [];
             request.post('https://slack.com/api/users.list', {
                 form: {
                     token: token
@@ -120,7 +120,7 @@ export const slackAuth = (req, res) => {
             }, (error, response, body) => {
                 const body_json = JSON.parse(body);
 
-                let users = [];
+
                 let user_id, user_team_id, name, email, tz, is_bot, is_admin;
                 const members = body_json.members;
 
@@ -145,9 +145,9 @@ export const slackAuth = (req, res) => {
 
                 });
 
-                Users.insertManyUsers(users)    
-                    .then(data => console.log("Datatata GOT AFTER INSERT MANY", data))
-                    .catch(err => console.log(err));
+                // Users.insertManyUsers(users)    
+                //     .then(data => console.log("Datatata GOT AFTER INSERT MANY", data))
+                //     .catch(err => console.log(err));
 
 
             });
@@ -171,7 +171,8 @@ export const slackAuth = (req, res) => {
                         const data = {
                             'team_id': team_id,
                             'team_domain': team,
-                            'token': token
+                            'token': token,
+                            'members': users
                         }
 
                         Teams.insert(data)

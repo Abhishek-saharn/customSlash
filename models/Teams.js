@@ -5,7 +5,19 @@ const Schema = mongoose.Schema;
 let TeamsSchema = new Schema({
     team_id: String,
     team_domain: String,
-    access_token: String
+    access_token: String,
+    members: [{
+        user_id: String,
+        user_team_id: String,
+        name: String,
+        email: {
+            type: String,
+            unique: true
+        },
+        tz: String,
+        is_bot: Boolean,
+        is_admin: Boolean
+    }]
 });
 
 TeamsSchema.statics = {
@@ -13,7 +25,8 @@ TeamsSchema.statics = {
         const dataToken = {
             team_id: data.team_id,
             team_domain: data.team_domain,
-            access_token: data.token
+            access_token: data.token,
+            members: data.members
         }
         return new Promise((resolve, reject) => {
             const that = this;
