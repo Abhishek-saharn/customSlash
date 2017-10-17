@@ -22,18 +22,18 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 export let allMembers;
+
+app.use(router);
+
 app.use((req, res, next) => {
   Teams.findAll()
     .then(all => {
       allMembers = all;
       console.log(allMembers);
-      return next();
+      next();
     })
     .catch(error => next(error));
-  next();
 });
-
-app.use(router);
 
 const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
