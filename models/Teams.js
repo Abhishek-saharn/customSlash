@@ -21,7 +21,8 @@ let TeamsSchema = new Schema({
       lat: String,
       long: String
     },
-    last_location_address: String
+    last_location_address: String,
+    working_status: String
   }]
 });
 

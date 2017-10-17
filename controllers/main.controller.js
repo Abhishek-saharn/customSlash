@@ -28,6 +28,7 @@ export const slashHome = (req, res) => {
   } else {
     const text = req.body.text;
     const teamId = req.body.team_id;
+    
     // const teamDomain = req.body.team_domain;
     if (gtoken === null) {
       Teams.find(teamId).then(accessToken => {

@@ -17,7 +17,7 @@ const UserSchema = new Schema({
 });
 
 UserSchema.statics = {
-  insertManyUsers: function (users) {
+  insertManyUsers(users) {
     return new Promise((resolve, reject) => {
       return this.insertMany(users)
         .then(data => resolve(data))
