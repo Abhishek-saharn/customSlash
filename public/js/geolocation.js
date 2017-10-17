@@ -14,17 +14,20 @@ setLocation = (position) => {
   latlon = `${position.coords.latitude},${position.coords.longitude}`;
   workLocation = "28.599446, 77.331477";
   const imgUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latlon}&zoom=16.8&size=800x600&markers=color:red%7Clabel:W%7C${workLocation}&markers=color:blue%7Clabel:L%7C${latlon}&key=${key}`;
+  console.log(imgUrl);
   document.getElementById("map").innerHTML = "<img src='" + imgUrl + "'>";
 
-  $.post(`http://maps.googleapis.com/maps/api/geocode/json?latlng=${workLocation}`, (data) => {
-    console.log(data.results[0].formatted_address);
-    document.getElementById("work").innerHTML = data.results[0].formatted_address;
-  });
+  $.post(`http://maps.googleapis.com/maps/api/geocode/json?latlng=${workLocation}`)
+    .done((data) => {
+      console.log(data.results[0].formatted_address);
+      document.getElementById("work").innerHTML = data.results[0].formatted_address;
+    });
 
-  $.post(`http://maps.googleapis.com/maps/api/geocode/json?latlng=${latlon}`, (data) => {
-    console.log(data.results[0].formatted_address);
-    document.getElementById("location").innerHTML = data.results[0].formatted_address;
-  });
+  $.post(`http://maps.googleapis.com/maps/api/geocode/json?latlng=${latlon}`)
+    .done((data) => {
+      console.log(data.results[0].formatted_address);
+      document.getElementById("location").innerHTML = data.results[0].formatted_address;
+    });
 };
 
 errorHandler = (error) => {

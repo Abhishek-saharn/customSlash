@@ -1,5 +1,6 @@
 import workstatus from "../api/workStatus";
 import attachmentsURLs from "../api/attachmentsURLs";
+import workCodes from "../api/workCodes";
 import request from "request";
 
 import {
@@ -28,7 +29,10 @@ export const slashHome = (req, res) => {
   } else {
     const text = req.body.text;
     const teamId = req.body.team_id;
-    
+
+    console.log(workCodes[1]);
+
+
     // const teamDomain = req.body.team_domain;
     if (gtoken === null) {
       Teams.find(teamId).then(accessToken => {
@@ -204,5 +208,6 @@ export const approvedAction = (req, res) => {
 };
 
 export const geoLocation = (req, res) => {
+  console.log("AA gya main yaha pe ", `${process.env.PWD}/ui/geolocation.html`);
   res.sendFile(`${process.env.PWD}/ui/geolocation.html`);
 };

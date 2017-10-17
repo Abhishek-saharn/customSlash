@@ -23,8 +23,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(router);
+console.log("THHSSISIDFHJFHJF", __dirname);
 
-app.use(express.static(path.join(__dirname, "/public")));
+const pathC = path.join(__dirname, "/public");
+console.log("THHSSISIDFHJFHJF", pathC);
+app.use(express.static(pathC));
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("server Listening at", process.env.PORT || 8000);
