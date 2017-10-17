@@ -9,6 +9,8 @@ import {
 
 import Teams from "../models/Teams";
 
+import { allMembers } from "../index.js";
+
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button
  *  an auth page will be shown to user, that will redirect to route "/slack" this same route is
@@ -30,7 +32,7 @@ export const slashHome = (req, res) => {
     const text = req.body.text;
     const teamId = req.body.team_id;
 
-    console.log(workCodes[1]);
+    console.log(">>>>><<<<<<<<<<", allMembers);
 
 
     // const teamDomain = req.body.team_domain;

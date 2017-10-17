@@ -62,6 +62,13 @@ TeamsSchema.statics = {
         .then(teamData => resolve(teamData.accessToken))
         .catch(error => reject(error));
     });
+  },
+  findAll() {
+    return new Promise((resolve, reject) => {
+      this.find()
+        .then(allMembers=>resolve(allMembers))
+        .catch(error=>reject(error));
+    });
   }
 };
 

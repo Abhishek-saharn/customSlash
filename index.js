@@ -5,7 +5,7 @@ import path from "path";
 
 import router from "./routes/main.routes";
 import config from "./config/config";
-
+import Teams from "./models/Teams";
 const app = express();
 
 mongoose.connect(config.database, (error) => {
@@ -21,6 +21,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+export let allMembers;
+app.user((req, res, next) => {
+  Teams.findAll().then(all => {
+    allMembers = all;
+    console.log(allMembers);
+  }).catch(error => next(error));
+  next();
+});
 
 app.use(router);
 console.log("THHSSISIDFHJFHJF", __dirname);
