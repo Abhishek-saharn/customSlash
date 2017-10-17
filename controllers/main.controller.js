@@ -105,7 +105,7 @@ export const slackAuth = (req, res) => {
   /**
    *  Below data is POSTed to the oauth.access and a token is then stored.
    */
-  request.post("https://slack.com/api/oauth.access", data, function (error, response, body) {
+  request.post("https://slack.com/api/oauth.access", data,  (error, response, body) => {
     if (!error && response.statusCode === 200) {
       // Get an auth token
       const token = JSON.parse(body).access_token;
@@ -150,7 +150,7 @@ export const slackAuth = (req, res) => {
         form: {
           token: token
         }
-      }, function (errorTeamInfo, responseTeamInfo, bodyTeamInfo) {
+      }, (errorTeamInfo, responseTeamInfo, bodyTeamInfo) => {
         if (!errorTeamInfo && responseTeamInfo.statusCode === 200) {
           if (JSON.parse(bodyTeamInfo).error === "missing_scope") {
             // res.send("Bot added");

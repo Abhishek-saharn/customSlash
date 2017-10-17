@@ -22,19 +22,17 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 export let allMembers;
-app.use((req, res, next) => {
-  Teams.findAll().then(all => {
-    allMembers = all;
-    console.log(allMembers);
-  }).catch(error => next(error));
-  next();
-});
+// app.use((req, res, next) => {
+//   Teams.findAll().then(all => {
+//     allMembers = all;
+//     console.log(allMembers);
+//   }).catch(error => next(error));
+//   next();
+// });
 
 app.use(router);
-console.log("THHSSISIDFHJFHJF", __dirname);
 
 const pathC = path.join(__dirname, "/public");
-console.log("THHSSISIDFHJFHJF", pathC);
 app.use(express.static(pathC));
 
 app.listen(process.env.PORT || 8000, () => {
