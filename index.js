@@ -25,16 +25,18 @@ export let allMembers;
 
 app.use(router);
 
-app.use(function (req, res, next) {
-  console.log(":::::::::::::::::::::::::>>><<<");
-  Teams.findAll()
-    .then(all => {
-      allMembers = all;
-      console.log(":::::::::::::::::::::::::", allMembers);
-      next();
-    })
-    .catch(error => next(error));
-});
+// app.use((req, res, next) => {
+//   Teams.findAll()
+//     .then(all => {
+//       allMembers = all;
+//       console.log(":::::::::::::::::::::::::", allMembers);
+//       next();
+//     })
+//     .catch(error => {
+//       console.log(":::::::::::::::::::::::::>>><<<");
+//       next(error);
+//     });
+// });
 
 const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
