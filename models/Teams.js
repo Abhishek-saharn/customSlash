@@ -26,7 +26,7 @@ let TeamsSchema = new Schema({
 });
 
 TeamsSchema.statics = {
-  insert: function (data) {
+  insert(data) {
     const dataToken = {
       team_id: data.team_id,
       team_domain: data.team_domain,
@@ -53,7 +53,7 @@ TeamsSchema.statics = {
         .catch(error => reject(error));
     });
   },
-  find: function (teamId) {
+  find(teamId) {
     return new Promise((resolve, reject) => {
       this.findOne({
         team_id: teamId
