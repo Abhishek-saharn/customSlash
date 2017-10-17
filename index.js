@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 export let allMembers;
-app.user((req, res, next) => {
+app.use((req, res, next) => {
   Teams.findAll().then(all => {
     allMembers = all;
     console.log(allMembers);
