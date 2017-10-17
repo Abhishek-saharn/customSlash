@@ -47,28 +47,28 @@ export const slashHome = (req, res) => {
       text: `${text} is ${status}`,
       attachments: [{
 
-          image_url: `${attachmentsURLs[status]}`
+        image_url: `${attachmentsURLs[status]}`
+      },
+      {
+        fallback: "Have you aprooved?",
+        title: "Have you aprooved?",
+        callback_id: "123xyz",
+        color: "#3AA3E3",
+        attachment_type: "default",
+        actions: [{
+          name: "yes",
+          text: "Yes",
+          type: "button",
+          value: "yes"
         },
         {
-          fallback: "Have you aprooved?",
-          title: "Have you aprooved?",
-          callback_id: "123xyz",
-          color: "#3AA3E3",
-          attachment_type: "default",
-          actions: [{
-              name: "yes",
-              text: "Yes",
-              type: "button",
-              value: "yes"
-            },
-            {
-              name: "no",
-              text: "No",
-              type: "button",
-              value: "no"
-            }
-          ]
+          name: "no",
+          text: "No",
+          type: "button",
+          value: "no"
         }
+        ]
+      }
       ]
     };
     displayMessage(req.body.response_url, data);
@@ -148,8 +148,8 @@ export const slackAuth = (req, res) => {
           if (JSON.parse(bodyTeamInfo).error === "missing_scope") {
             // res.send("Bot added");
           } else {
-            const teamId = JSON.parse(body).team.id;
-            const team = JSON.parse(body).team.domain;
+            const teamId = JSON.parse(bodyTeamInfo).team.id;
+            const team = JSON.parse(bodyTeamInfo).team.domain;
 
             const Teamdata = {
               team_id: teamId,
