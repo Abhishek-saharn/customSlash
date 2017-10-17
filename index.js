@@ -26,6 +26,7 @@ export let allMembers;
 app.use(router);
 
 app.use((req, res, next) => {
+  console.log(":::::::::::::::::::::::::>>><<<");
   Teams.findAll()
     .then(all => {
       allMembers = all;
