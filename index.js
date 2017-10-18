@@ -39,7 +39,7 @@ app.use(router);
 // });
 
 app.use((req, res, next) => {
-  console.log(req, res);
+  console.log("req, res");
   next();
 });
 
