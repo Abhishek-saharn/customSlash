@@ -38,11 +38,10 @@ app.use(router);
 //     });
 // });
 
-app.use((req, res, next) => {
-  console.log("req, res");
+app.use(function (req, res, next) {
+  console.log("Time:", Date.now());
   next();
 });
-
 
 const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
