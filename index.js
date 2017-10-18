@@ -38,13 +38,9 @@ app.use(router);
 //     });
 // });
 
-app.use(function (req, res, next) {
-  Teams.findAll().then(all => {
-    console.log(":::::::::<<<<<<>>>>>>>>>", all);
-    next();
-  }).catch(err => {
-    if (err) return next(err);
-  });
+app.use((req, res, next) => {
+  console.log(req, res);
+  next();
 });
 
 
