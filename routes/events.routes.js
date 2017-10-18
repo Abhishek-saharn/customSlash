@@ -8,4 +8,4 @@ const router = new Router();
 
 router.route("/events", eventHandler);
 
-module.exports = router;
+export default router;
