@@ -9,7 +9,6 @@ import {
 
 import Teams from "../models/Teams";
 
-import { allMembers } from "../index.js";
 
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button
@@ -32,7 +31,18 @@ export const slashHome = (req, res) => {
     const text = req.body.text;
     const teamId = req.body.team_id;
 
-    console.log(">>>>><<<<<<<<<<", allMembers);
+    let allMembers;
+
+    Teams.findAll()
+      .then(all => {
+        allMembers = all;
+        console.log(":::::::::::::::::::::::::", allMembers);
+        next();
+      })
+      .catch(error => {
+        console.log(":::::::::::::::::::::::::>>><<<", error);
+        next(error);
+      });
 
 
     // const teamDomain = req.body.team_domain;
@@ -105,7 +115,7 @@ export const slackAuth = (req, res) => {
   /**
    *  Below data is POSTed to the oauth.access and a token is then stored.
    */
-  request.post("https://slack.com/api/oauth.access", data,  (error, response, body) => {
+  request.post("https://slack.com/api/oauth.access", data, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       // Get an auth token
       const token = JSON.parse(body).access_token;

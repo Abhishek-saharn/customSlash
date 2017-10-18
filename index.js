@@ -5,7 +5,6 @@ import path from "path";
 
 import router from "./routes/main.routes";
 import config from "./config/config";
-import Teams from "./models/Teams";
 const app = express();
 
 mongoose.connect(config.database, (error) => {
@@ -24,27 +23,9 @@ app.use(bodyParser.urlencoded({
 const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
 
-export let allMembers;
-
-app.use(function (req, res, next) {
-  console.log("Time:", Date.now());
-  next();
-});
 
 app.use(router);
 
-// app.use((req, res, next) => {
-//   Teams.findAll()
-//     .then(all => {
-//       allMembers = all;
-//       console.log(":::::::::::::::::::::::::", allMembers);
-//       next();
-//     })
-//     .catch(error => {
-//       console.log(":::::::::::::::::::::::::>>><<<");
-//       next(error);
-//     });
-// });
 app.listen(process.env.PORT || 8000, () => {
   console.log("server Listening at", process.env.PORT || 8000);
 });
