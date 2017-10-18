@@ -37,11 +37,9 @@ export const slashHome = (req, res) => {
       .then(all => {
         allMembers = all;
         console.log(":::::::::::::::::::::::::", allMembers);
-        next();
       })
       .catch(error => {
         console.log(":::::::::::::::::::::::::>>><<<", error);
-        next(error);
       });
 
 
