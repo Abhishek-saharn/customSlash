@@ -59,7 +59,9 @@ TeamsSchema.statics = {
       this.findOne({
         team_id: teamId
       })
-        .then(teamData => resolve(teamData.accessToken))
+        .then(teamData => {
+          return resolve(teamData.access_token);
+        })
         .catch(error => reject(error));
     });
   },

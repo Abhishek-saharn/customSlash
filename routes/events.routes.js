@@ -6,6 +6,8 @@ import {
 
 const router = new Router();
 
-router.route("/events", eventHandler);
+
+router.route("/events").post(eventHandler);
+
 
 export default router;

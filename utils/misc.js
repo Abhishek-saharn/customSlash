@@ -9,8 +9,5 @@ export function displayMessage(responseUrl, message) {
     }
   };
 
-  request.post(options, (error, response, body) => {
-    console.log("<<<<<>>>>>>>>>><ERRRRRRR", error);
-    console.log("BBBBOOOOOOODDDDYYYY", body);
-  });
+  request.post(options, (error, response, body) => {});
 }

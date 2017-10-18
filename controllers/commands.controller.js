@@ -1,6 +1,6 @@
 import workstatus from "../api/workStatus";
 import attachmentsURLs from "../api/attachmentsURLs";
-import workCodes from "../api/workCodes";
+// import workCodes from "../api/workCodes";
 import request from "request";
 
 import {
@@ -16,7 +16,7 @@ import Teams from "../models/Teams";
  *  also provided in slack app "Oauth" url .
  */
 
-let gtoken = null;
+export let gtoken = null;
 
 export const indexButton = (req, res) => {
   res.sendFile(`${process.env.PWD}/ui/index.html`);
@@ -30,25 +30,12 @@ export const slashHome = (req, res) => {
   } else {
     const text = req.body.text;
     const teamId = req.body.team_id;
-
-    let allMembers;
-
-    // Teams.findAll()
-    //   .then(all => {
-    //     allMembers = all;
-    //     console.log(":::::::::::::::::::::::::", allMembers);
-    //   })
-    //   .catch(error => {
-    //     console.log(":::::::::::::::::::::::::>>><<<", error);
-    //   });
-
-
-    // const teamDomain = req.body.team_domain;
-    if (gtoken === null) {
+    if (gtoken === null || gtoken === undefined) {
       Teams.find(teamId).then(accessToken => {
         gtoken = accessToken;
+        console.log("GOTOKEN ", teamId, accessToken);
       }).catch(error => {
-        console.log(error);
+        console.log("HERE WE GOT THE ERROR WHILE GETTING ACCESS TOKEN", error);
       });
     }
 
@@ -147,7 +134,6 @@ export const slackAuth = (req, res) => {
             is_bot: user.is_bot,
             is_admin: user.is_admin
           };
-          console.log("DDATATA TTOO BBEE PUUSSHHEEDD ", userData);
           users.push(userData);
         });
       });
@@ -195,7 +181,7 @@ export const approvedAction = (req, res) => {
 
 
   const payloadjson = JSON.parse(req.body.payload);
-
+  console.log("||||||||||||||", payloadjson);
 
   if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("ACCESS FORBIDDEN");

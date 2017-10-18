@@ -3,5 +3,13 @@
 <head></head>
 
 <body>
-    <a href="https://slack.com/oauth/authorize?scope=commands+team%3Aread+chat%3Awrite%3Abot+users%3Aread+users:read.email&client_id=252772026273.254016033173"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+    <a href="https://slack.com/oauth/authorize?scope=commands+team%3Aread+chat%3Awrite%3Abot+users%3Aread+users:read.email+channels%3Ahistory&client_id=252772026273.254016033173"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
 </body>
+
+<!-- In the href link following permissions are passed: 
+    cammands  : to act on slash Commands,
+    team:read  : to get domain name and information about a team.
+    chat:write:bot  : to write messeges in workspace as a bot.
+    users:read      : to read about all the users in a team. and when a new user joins.
+    users:real.email    : to read emails of users in team.
+    channels:history    : to detect events whenever a new message is posted  -->
