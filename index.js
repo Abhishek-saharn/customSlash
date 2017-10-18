@@ -3,8 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import path from "path";
 
-import commandsRouter from "./routes/commands.routes";
-import eventsRouter from "./routes/events.routes";
+import commandsRouter from "./routes/commands.routes.js";
+import eventsRouter from "./routes/events.routes.js";
 import config from "./config/config";
 const app = express();
 

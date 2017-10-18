@@ -7,3 +7,5 @@ import {
 const router = new Router();
 
 router.route("/events", eventHandler);
+
+module.exports = router;
