@@ -39,10 +39,11 @@ app.use(router);
 // });
 
 app.use(function (req, res, next) {
-  Teams.find({}, function (err, questions) {
-    if (err) return next(err);
-    console.log(":::::::::<<<<<<>>>>>>>>>", questions);
+  Teams.findAll().then(all => {
+    console.log(":::::::::<<<<<<>>>>>>>>>", all);
     next();
+  }).catch(err => {
+    if (err) return next(err);
   });
 });
 
