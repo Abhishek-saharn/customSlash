@@ -21,7 +21,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+const pathC = path.join(__dirname, "/public");
+app.use(express.static(pathC));
+
 export let allMembers;
+
+app.use(function (req, res, next) {
+  console.log("Time:", Date.now());
+  next();
+});
 
 app.use(router);
 
@@ -37,15 +45,6 @@ app.use(router);
 //       next(error);
 //     });
 // });
-
-app.use(function (req, res, next) {
-  console.log("Time:", Date.now());
-  next();
-});
-
-const pathC = path.join(__dirname, "/public");
-app.use(express.static(pathC));
-
 app.listen(process.env.PORT || 8000, () => {
   console.log("server Listening at", process.env.PORT || 8000);
 });
