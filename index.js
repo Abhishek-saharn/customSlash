@@ -3,7 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import path from "path";
 
-import router from "./routes/main.routes";
+import commandsRouter from "./routes/commands.routes";
+import eventsRouter from "./routes/events.routes";
 import config from "./config/config";
 const app = express();
 
@@ -24,7 +25,8 @@ const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
 
 
-app.use(router);
+app.use(commandsRouter);
+app.use(eventsRouter);
 
 app.listen(process.env.PORT || 8000, () => {
   console.log("server Listening at", process.env.PORT || 8000);

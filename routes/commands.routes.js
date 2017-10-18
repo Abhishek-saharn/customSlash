@@ -8,7 +8,7 @@ import {
   slackAuth,
   approvedAction,
   geoLocation
-} from "../controllers/main.controller.js";
+} from "../controllers/commands.controller.js";
 
 const router = new Router();
 /**
@@ -29,7 +29,6 @@ router.route("/index").get(indexButton);
 
 
 router.route("/approvedAction").post(approvedAction);
-
 
 router.route("/geoLocation").get(geoLocation);
 
