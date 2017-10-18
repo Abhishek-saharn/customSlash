@@ -38,6 +38,15 @@ app.use(router);
 //     });
 // });
 
+app.use(function (req, res, next) {
+  Teams.find({}, function (err, questions) {
+    if (err) return next(err);
+    console.log(":::::::::<<<<<<>>>>>>>>>", questions);
+    next();
+  });
+});
+
+
 const pathC = path.join(__dirname, "/public");
 app.use(express.static(pathC));
 
