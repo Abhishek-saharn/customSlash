@@ -33,14 +33,14 @@ export const slashHome = (req, res) => {
 
     let allMembers;
 
-    Teams.findAll()
-      .then(all => {
-        allMembers = all;
-        console.log(":::::::::::::::::::::::::", allMembers);
-      })
-      .catch(error => {
-        console.log(":::::::::::::::::::::::::>>><<<", error);
-      });
+    // Teams.findAll()
+    //   .then(all => {
+    //     allMembers = all;
+    //     console.log(":::::::::::::::::::::::::", allMembers);
+    //   })
+    //   .catch(error => {
+    //     console.log(":::::::::::::::::::::::::>>><<<", error);
+    //   });
 
 
     // const teamDomain = req.body.team_domain;
