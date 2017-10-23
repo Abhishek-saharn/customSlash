@@ -9,5 +9,7 @@ export function displayMessage(responseUrl, message) {
     }
   };
 
-  request.post(options, (error, response, body) => {});
+  request.post(options, (error, response, body) => {
+   if(error) console.log("ERROR HAPPENED WHILE POSTING MESSAGE", error);
+  });
 }

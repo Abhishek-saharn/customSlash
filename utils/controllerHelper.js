@@ -30,9 +30,16 @@ export function updateWhereabouts(userId, codeString, response_url) {
 
   Users.updateWhereabouts(userId, weekWhereabouts)
     .then((data) => {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+      const str = `${days[weekWhereabouts[0].date.getDay()]} is ${weekWhereabouts[0].status}
+      ${days[weekWhereabouts[1].date.getDay()]} is ${weekWhereabouts[1].status}
+      ${days[weekWhereabouts[2].date.getDay()]} is ${weekWhereabouts[2].status}
+      ${days[weekWhereabouts[3].date.getDay()]} is ${weekWhereabouts[3].status}
+      ${days[weekWhereabouts[4].date.getDay()]} is ${weekWhereabouts[4].status}`;
       const message = {
         response_type: "in_channel",
-        text: weekWhereabouts
+        text: str
       };
       console.log("ahjfsdgas");
       displayMessage(response_url, message);
