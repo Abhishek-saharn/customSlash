@@ -5,25 +5,7 @@ const Schema = mongoose.Schema;
 let TeamsSchema = new Schema({
   team_id: String,
   team_domain: String,
-  access_token: String,
-  members: [{
-    user_id: String,
-    user_team_id: String,
-    name: String,
-    email: {
-      type: String,
-      unique: true
-    },
-    tz: String,
-    is_bot: Boolean,
-    is_admin: Boolean,
-    last_location: {
-      lat: String,
-      long: String
-    },
-    last_location_address: String,
-    working_status: String
-  }]
+  access_token: String
 });
 
 TeamsSchema.statics = {
@@ -31,8 +13,7 @@ TeamsSchema.statics = {
     const dataToken = {
       team_id: data.team_id,
       team_domain: data.team_domain,
-      access_token: data.token,
-      members: data.members
+      access_token: data.token
     };
     return new Promise((resolve, reject) => {
       const that = this;

@@ -3,7 +3,7 @@ import {
   gtoken
 } from "./commands.controller";
 import request from "request";
-import queryString from 'query-string';
+// import queryString from "query-string";
 
 export const eventHandler = (req, res) => {
   res.status(200).end();
@@ -38,12 +38,11 @@ export const eventHandler = (req, res) => {
         token: gtoken,
         channel: bodyJSON.event.item.channel,
         text: message
-      }
+      };
       const qs = queryString.stringify(dataToPassed);
       request.post(`https://slack.com/api/chat.postMessage?${qs}`, (err, req, resa) => {
         console.log(resa);
       });
-
     }
     console.log("");
   }

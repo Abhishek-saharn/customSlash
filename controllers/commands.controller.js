@@ -1,5 +1,6 @@
-import workstatus from "../api/workStatus";
-import attachmentsURLs from "../api/attachmentsURLs";
+import {
+  updateWhereabouts
+} from "../utils/controllerHelper";
 // import workCodes from "../api/workCodes";
 import request from "request";
 
@@ -8,7 +9,7 @@ import {
 } from "../utils/misc";
 
 import Teams from "../models/Teams";
-
+import Users from "../models/Users";
 
 /**
  *  "index.html" contains a button that will let users authorize / commands. After clicking button
@@ -28,52 +29,50 @@ export const slashHome = (req, res) => {
   if (req.body.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("ACCESS FORBIDDEN");
   } else {
-    const text = req.body.text;
+    const text = (req.body.text);
+    const textArr = text.trim().split(" ");
+
     const teamId = req.body.team_id;
+    const userId = req.body.user_id;
+
+
     if (gtoken === null || gtoken === undefined) {
       Teams.find(teamId).then(accessToken => {
         gtoken = accessToken;
-        console.log("GOTOKEN ", teamId, accessToken);
+        console.log("GOT THE TOKEN ", teamId, accessToken);
       }).catch(error => {
         console.log("HERE WE GOT THE ERROR WHILE GETTING ACCESS TOKEN", error);
       });
     }
-
-    if (/^\d+$/.test(text)) {
-      res.send("You are Enterning number. Which is under development phase");
-      return;
-    }
-    let status = workstatus[text];
-    let data = {
-      response_type: "in_channel", // public to the channel
-      text: `${text} is ${status}`,
-      attachments: [{
-
-        image_url: `${attachmentsURLs[status]}`
-      },
-      {
-        fallback: "Have you aprooved?",
-        title: "Have you aprooved?",
-        callback_id: "123xyz",
-        color: "#3AA3E3",
-        attachment_type: "default",
-        actions: [{
-          name: "yes",
-          text: "Yes",
-          type: "button",
-          value: "yes"
-        },
-        {
-          name: "no",
-          text: "No",
-          type: "button",
-          value: "no"
-        }
-        ]
+    if (textArr.length === 1) {
+      if (/^\d+$/.test(text)) {
+        res.send("You are put a Wrong entry.");
+        return;
       }
-      ]
-    };
-    displayMessage(req.body.response_url, data);
+      let status;
+      let today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      Users.findStatus(textArr[0]).then(data => {
+        data.forEach(d => {
+          d.work_status.forEach((s) => {
+            if (s.date.getTime() === today.getTime()) {
+              status = s.status;
+            }
+          });
+          let dataToPass = {
+            response_type: "in_channel", // public to the channel
+            text: `${text} is ${status}`
+          };
+
+          displayMessage(req.body.response_url, dataToPass);
+        });
+      }).catch(() => {});
+    } else if (textArr.length === 2 &&
+      (textArr[0] === "whereabouts" || textArr[0] === "Whereabouts") &&
+      /^[0-9]+$/.test(textArr[1])) {
+      updateWhereabouts(userId, textArr[1], req.body.response_url);
+    }
   }
 };
 
@@ -126,9 +125,7 @@ export const slackAuth = (req, res) => {
           let userData = {
             user_id: user.id,
             user_team_id: user.team_id,
-            name: user.profile.real_name ||
-              (user.profile.first_name + user.profile.last_name) ||
-              user.profile.display_name,
+            name: user.name,
             email: user.profile.email,
             tz: user.tz,
             is_bot: user.is_bot,
@@ -136,6 +133,8 @@ export const slackAuth = (req, res) => {
           };
           users.push(userData);
         });
+
+        Users.insertManyUsers(users).then().catch();
       });
 
 
@@ -155,8 +154,7 @@ export const slackAuth = (req, res) => {
             const Teamdata = {
               team_id: teamId,
               team_domain: team,
-              token: token,
-              members: users
+              token: token
             };
 
             Teams.insert(Teamdata)
@@ -176,6 +174,10 @@ export const slackAuth = (req, res) => {
   });
 };
 
+/**
+ * approvedAction is not still required as it is just used for lerning Button functonality.
+ * */
+
 export const approvedAction = (req, res) => {
   res.status(200).end();
 
@@ -186,7 +188,7 @@ export const approvedAction = (req, res) => {
   if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("ACCESS FORBIDDEN");
   } else {
-    console.log("GGOOOOOTTTT THE TOKEN", gtoken);
+    // console.log("GGOOOOOTTTT THE TOKEN", gtoken);
     let attachmentsS = {
       fallback: "Have you aprooved?",
       title: "Thankyou for responding",

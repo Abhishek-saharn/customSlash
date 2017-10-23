@@ -13,7 +13,11 @@ const UserSchema = new Schema({
   },
   tz: String,
   is_bot: Boolean,
-  is_admin: Boolean
+  is_admin: Boolean,
+  work_status: [{
+    date: Date,
+    status: String
+  }]
 });
 
 UserSchema.statics = {
@@ -22,6 +26,31 @@ UserSchema.statics = {
       return this.insertMany(users)
         .then(data => resolve(data))
         .catch((err) => reject(err));
+    });
+  },
+  updateWhereabouts(userId, weekWhereabouts) {
+    return new Promise((resolve, reject) => {
+      this.update({
+        user_id: userId
+      }, {
+        $push: {
+          work_status: {
+            $each: weekWhereabouts
+
+          }
+        }
+      }).then((data) => resolve(data)).catch((err) => reject(err));
+    });
+  },
+  findStatus(name) {
+    return new Promise((resolve, reject) => {
+      this.find({
+        name: name
+      }).then(data => {
+        return resolve(data);
+      }).catch(err => {
+        return reject(err);
+      });
     });
   }
 };
