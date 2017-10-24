@@ -59,7 +59,7 @@ export function getMemberStatus(userId, textArr, response_url) {
       });
       let dataToPass = {
         response_type: "in_channel", // public to the channel
-        text: `${textArr[0]} is ${status}`
+        text: `*${textArr[0]}* is *${status}*`
       };
 
       displayMessage(response_url, dataToPass);
