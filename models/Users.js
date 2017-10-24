@@ -21,6 +21,13 @@ const UserSchema = new Schema({
 });
 
 UserSchema.statics = {
+  insertUser(user) {
+    return new Promise((resolve, reject) => {
+      this.create(user)
+        .then(data => (resolve(data)))
+        .catch(err => (reject(err)));
+    });
+  },
   insertManyUsers(users) {
     return new Promise((resolve, reject) => {
       return this.insertMany(users)
@@ -33,13 +40,29 @@ UserSchema.statics = {
       this.update({
         user_id: userId
       }, {
-        $push: {
+        $pull: {
           work_status: {
-            $each: weekWhereabouts
-
+            date: {
+              $gte: new Date().setHours(0, 0, 0, 0)
+            }
           }
         }
-      }).then((data) => resolve(data)).catch((err) => reject(err));
+      }).then(dataPulled => {
+        this.update({
+          user_id: userId
+        }, {
+          $push: {
+            work_status: {
+              $each: weekWhereabouts
+
+            }
+          }
+        }, {
+          upsert: true
+        }).then((data) => resolve(data)).catch((err) => reject(err));
+      }).catch(errorPulled => {
+        console.log("ERROR DURING PULLALL", errorPulled);
+      });
     });
   },
   findStatus(name) {

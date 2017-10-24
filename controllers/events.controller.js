@@ -2,8 +2,9 @@
 import {
   gtoken
 } from "./commands.controller";
+import Users from "../models/Users";
 import request from "request";
-// import queryString from "query-string";
+import queryString from "query-string";
 
 export const eventHandler = (req, res) => {
   res.status(200).end();
@@ -18,6 +19,8 @@ export const eventHandler = (req, res) => {
   //   }
   // });
   const bodyJSON = req.body;
+  console.log("<<<<<<<<>>>>>>><<<<>>>>", bodyJSON);
+
   if (bodyJSON.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("Access Forbidden");
   } else {
@@ -28,22 +31,39 @@ export const eventHandler = (req, res) => {
     //   });
     //   res.status(200).end();
     // }
-    if (bodyJSON.event.type === "message") {
-      const text = bodyJSON.event.text;
-
-      const user = bodyJSON.event.user;
-      const message = `Thankyou @<${user}> for the ${text}`;
-
-      const dataToPassed = {
-        token: gtoken,
-        channel: bodyJSON.event.item.channel,
-        text: message
+    switch (bodyJSON.type) {
+    case "team_join":
+    {
+      console.log("<<<<>>>>>>", bodyJSON.user);
+      const user = bodyJSON.user;
+      let userData = {
+        user_id: user.id,
+        user_team_id: user.team_id,
+        name: user.name,
+        email: user.profile.email,
+        tz: user.tz,
+        is_bot: user.is_bot,
+        is_admin: user.is_admin
       };
-      const qs = queryString.stringify(dataToPassed);
-      request.post(`https://slack.com/api/chat.postMessage?${qs}`, (err, req, resa) => {
-        console.log(resa);
-      });
+      Users.insertUser(userData)
+        .then(data => {
+          const message = `Welcome <@${user.id}>!`;
+          const dataToPassed = {
+            token: gtoken,
+            channel: bodyJSON.event.item.channel,
+            text: message
+          };
+          const qs = queryString.stringify(dataToPassed);
+          request.post(`https://slack.com/api/chat.postMessage?${qs}`, (err, reqa, resa) => {
+            console.log(resa);
+          });
+        })
+        .catch();
+
+      break;
     }
-    console.log("");
+    default:
+      break;
+    }
   }
 };

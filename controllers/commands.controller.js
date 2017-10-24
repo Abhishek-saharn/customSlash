@@ -1,5 +1,6 @@
 import {
-  updateWhereabouts
+  updateWhereabouts,
+  getMemberStatus
 } from "../utils/controllerHelper";
 // import workCodes from "../api/workCodes";
 import request from "request";
@@ -45,33 +46,14 @@ export const slashHome = (req, res) => {
       });
     }
     if (textArr.length === 1) {
-      if (/^\d+$/.test(text)) {
-        res.send("You are put a Wrong entry.");
-        return;
-      }
-      let status;
-      let today = new Date();
-      today.setHours(0, 0, 0, 0);
+      getMemberStatus(userId, textArr, req.body.response_url);
 
-      Users.findStatus(textArr[0]).then(data => {
-        data.forEach(d => {
-          d.work_status.forEach((s) => {
-            if (s.date.getTime() === today.getTime()) {
-              status = s.status;
-            }
-          });
-          let dataToPass = {
-            response_type: "in_channel", // public to the channel
-            text: `${text} is ${status}`
-          };
-
-          displayMessage(req.body.response_url, dataToPass);
-        });
-      }).catch(() => {});
     } else if (textArr.length === 2 &&
       (textArr[0] === "whereabouts" || textArr[0] === "Whereabouts") &&
       /^[0-9]+$/.test(textArr[1])) {
+
       updateWhereabouts(userId, textArr[1], req.body.response_url);
+
     }
   }
 };
@@ -159,10 +141,10 @@ export const slackAuth = (req, res) => {
 
             Teams.insert(Teamdata)
               .then((insertedData) => {
-                console.log(insertedData);
+                console.log("THIS DATA IS INSERTED", insertedData);
               })
               .catch((insertError) => {
-                console.log(insertError);
+                console.log("HERE WE GOT ERROR WHILE INSERTING TEAMDATA ", insertError);
               });
 
 
@@ -183,12 +165,10 @@ export const approvedAction = (req, res) => {
 
 
   const payloadjson = JSON.parse(req.body.payload);
-  console.log("||||||||||||||", payloadjson);
 
   if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("ACCESS FORBIDDEN");
   } else {
-    // console.log("GGOOOOOTTTT THE TOKEN", gtoken);
     let attachmentsS = {
       fallback: "Have you aprooved?",
       title: "Thankyou for responding",
@@ -206,6 +186,5 @@ export const approvedAction = (req, res) => {
 };
 
 export const geoLocation = (req, res) => {
-  console.log("AA gya main yaha pe ", `${process.env.PWD}/ui/geolocation.html`);
   res.sendFile(`${process.env.PWD}/ui/geolocation.html`);
 };

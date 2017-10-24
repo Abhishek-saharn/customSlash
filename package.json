@@ -14,6 +14,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "geoip-lite": "^1.2.1",
+    "moment": "^2.19.1",
     "mongoose": "^4.12.2",
     "query-string": "^5.0.0",
     "querystring": "^0.2.0",
