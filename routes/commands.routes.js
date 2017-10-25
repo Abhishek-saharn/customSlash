@@ -27,9 +27,14 @@ router.route("/slack").get(slackAuth);
  */
 router.route("/index").get(indexButton);
 
-
+/**
+ * Only used for learning purpose of interactive buttons and their functionality.
+ */
 router.route("/approvedAction").post(approvedAction);
 
+/**
+ * Captures location coming for browser(JUST USED FOR GET REQUESTS).
+ */
 router.route("/geoLocation").get(geoLocation);
 
 export default router;

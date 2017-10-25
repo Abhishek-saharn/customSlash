@@ -1,12 +1,15 @@
-import {
-  updateWhereabouts,
-  getMemberStatus
-} from "../utils/controllerHelper";
-// import workCodes from "../api/workCodes";
 import request from "request";
 
 import {
-  displayMessage
+  updateWhereabouts,
+  getMemberStatus,
+  showWhereaboutCodes,
+  updateTodaysStatus
+} from "../utils/controllerHelper";
+import {
+  displayMessage,
+  postMessage,
+  postMessageError
 } from "../utils/misc";
 
 import Teams from "../models/Teams";
@@ -30,7 +33,7 @@ export const slashHome = (req, res) => {
   if (req.body.token !== process.env.SLACK_VERIFICATION_TOKEN) {
     res.status(403).end("ACCESS FORBIDDEN");
   } else {
-    const text = (req.body.text);
+    const text = (req.body.text).toLowerCase();
     const textArr = text.trim().split(" ");
 
     const teamId = req.body.team_id;
@@ -46,14 +49,18 @@ export const slashHome = (req, res) => {
       });
     }
     if (textArr.length === 1) {
-      getMemberStatus(userId, textArr, req.body.response_url);
-
+      getMemberStatus(userId, textArr, req.body.channel_id, req.body.response_url);
     } else if (textArr.length === 2 &&
-      (textArr[0] === "whereabouts" || textArr[0] === "Whereabouts") &&
-      /^[0-9]+$/.test(textArr[1])) {
-
-      updateWhereabouts(userId, textArr[1], req.body.response_url);
-
+      textArr[0] === "whereabouts") {
+      if (/^[0-9]+$/.test(textArr[1])) {
+        updateWhereabouts(userId, textArr[1], req.body.channel_id, req.body.response_url);
+      } else if (textArr[1] === "codes") {
+        showWhereaboutCodes(userId, req.body.channel_id, req.body.response_url);
+      }
+    } else if (textArr[0] === "update" && textArr[1] === "status" && /^[1-6]$/.test(textArr[2])) {
+      updateTodaysStatus(userId, textArr[2], req.body.channel_id, req.body.response_url);
+    } else {
+      postMessageError(gtoken, req.body.channel_id);
     }
   }
 };

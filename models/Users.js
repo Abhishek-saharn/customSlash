@@ -75,6 +75,24 @@ UserSchema.statics = {
         return reject(err);
       });
     });
+  },
+  updateTodaysStatus(userId, today, newStatus) {
+    return new Promise((resolve, reject) => {
+      this.update({
+        user_id: userId,
+        "work_status.date": today
+      }, {
+        $set: {
+          "work_status.$.status": newStatus
+        }
+      }).then((data) => {
+        console.log("++++++", data);
+        return resolve(data);
+      }).catch(err => {
+        console.log("------", err);
+        return reject(err);
+      });
+    });
   }
 };
 module.exports = mongoose.model("Users", UserSchema);
