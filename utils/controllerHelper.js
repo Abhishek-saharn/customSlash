@@ -1,6 +1,8 @@
 import moment from "moment";
 import workCodes from "../api/workCodes";
 import Users from "../models/Users";
+import WorkStatus from "../models/WorkStatus";
+import StatusTimeMachine from "../models/StatusTimeMachine";
 import {
   displayMessage,
   postMessage,
@@ -15,33 +17,33 @@ import {
  */
 export function getMemberStatus(userId, textArr, channelId, responseUrl) {
   if (/^\d+$/.test(textArr[0])) {
-    res.send("You put a Wrong entry.");
+    postMessageError(gtoken, channelId);
     return;
   }
-  let status;
-  let todayMoment = moment();
-  console.log(textArr);
-  Users.findStatus(textArr[0]).then(data => {
-    if (data !== null) {
-      data.forEach(d => {
-        d.work_status.forEach((s) => {
-          if (todayMoment.isSame(moment(s.date), "Date")) {
-            console.log("MATTTCCHCHHHHEEEDDDD");
-            status = s.status;
-          }
-        });
-        let dataToPass = {
-          // response_type: "in_channel", // public to the channel
-          text: `*${textArr[0]}* is *${status}*`
-        };
+  const correctedText = textArr[0].substring(1);
 
-        displayMessage(responseUrl, dataToPass);
-      });
-    } else {
+  let status;
+  console.log(textArr);
+
+  Users.findUser(correctedText).then(data => {
+    const dayBefore = moment().subtract(1, "days").hour(23).minute(59);
+    const datyAfter = moment().add(1, "days").hour(0).minute(0);
+
+    console.log("THESE ARE<<<<DDAATTAA>>>>> BEFORE AND AFTER DATES ", data, dayBefore, datyAfter);
+
+    WorkStatus.findStatus(data.user_id, dayBefore, datyAfter).then(dataStatus => {
+      status = dataStatus.status;
+      let dataToPass = {
+        // response_type: "in_channel", // public to the channel
+        text: `*<@${correctedText}>* is *${status}*`
+      };
+      displayMessage(responseUrl, dataToPass);
+    }).catch((findStatusError) => {
+      console.log("HERE WE GOT ERROR IN findStatus>>", findStatusError);
       postMessageError(gtoken, channelId);
-    }
-  }).catch((err) => {
-    console.log("HERE WE GOT ERROR IN GETTING MEMBERS STATUS >>", err);
+    });
+  }).catch(findUserError => {
+    console.log("HERE WE GOT AN ERROR IN findUser>> ", findUserError);
     postMessageError(gtoken, channelId);
   });
 }
@@ -60,14 +62,14 @@ export function updateWhereabouts(userId, codeString, channelId, responseUrl) {
     const d = new Date(mom);
     // d.setHours(0, 0, 0, 0);
     const dayObj = {
+      user_id: userId,
       date: d,
       status: workCodes[code]
     };
     mom.add(1, "days");
     weekWhereabouts.push(dayObj);
   });
-
-  Users.updateWhereabouts(userId, weekWhereabouts)
+  WorkStatus.updateWhereabouts(userId, weekWhereabouts)
     .then(() => {
       const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       let str = "Your next weeks whereabouts have been logged as follows:\n";
@@ -80,6 +82,12 @@ export function updateWhereabouts(userId, codeString, channelId, responseUrl) {
         text: str
       };
       displayMessage(responseUrl, message);
+
+      StatusTimeMachine.insertwb(weekWhereabouts)
+        .then()
+        .catch(stmError => {
+          console.log("HERE WE GOT ERROR IN STATETIMEMACHINE", stmError);
+        });
     })
     .catch((err) => (console.log("GOT ERROR WHILE DISPLAYING", err)));
 }
@@ -92,17 +100,24 @@ export function showWhereaboutCodes(userId, channelId, responseUrl) {
   Object.keys(workCodes).forEach(key => {
     str = `${str}\n${key} - ${workCodes[key]}`;
   });
-  postMessage(str, gtoken, channelId);
-  // displayMessage(responseUrl, message);
+
+  const message = {
+    text: str
+  };
+
+  // postMessage(str, gtoken, channelId);
+  displayMessage(responseUrl, message);
 }
 
 export function updateTodaysStatus(userId, code, channelId, responseUrl) {
   const today = new Date(moment().format());
-  today.setHours(0, 0, 0, 0);
-  const newStatus = workCodes[code];
-  Users.updateTodaysStatus(userId, today, newStatus)
-    .then(data => {
+  // today.setHours(0, 0, 0, 0);
+  const dayBefore = moment().subtract(1, "days").hour(23).minute(59);
+  const datyAfter = moment().add(1, "days").hour(0).minute(0);
 
+  const newStatus = workCodes[code];
+  WorkStatus.updateTodaysStatus(userId, today, newStatus, dayBefore, datyAfter)
+    .then(data => {
       if (data.nModified === 1) {
         const str = `<@${userId}> changed status to ${newStatus}`;
         const att = [{
@@ -115,9 +130,21 @@ export function updateTodaysStatus(userId, code, channelId, responseUrl) {
           text: `Your status is updated to ${newStatus}`
         };
         displayMessage(responseUrl, message);
+
+        const wabt = {
+          user_id: userId,
+          date: today,
+          status: newStatus
+        };
+
+        StatusTimeMachine.insertwb([wabt])
+          .then()
+          .catch((error) => {
+            console.log("EERROR WHILE INSERT WABT>>>>", error);
+          });
       }
     }).catch(err => {
-      console.log("|||||||||||||", err);
+      console.log("HERE WE FOUND ERROR IN UPDATETODAYSSTATUS WHILE UPDATING>>", err);
       postMessageError(gtoken, channelId);
     });
 }

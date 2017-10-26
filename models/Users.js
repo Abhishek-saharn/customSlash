@@ -13,11 +13,7 @@ const UserSchema = new Schema({
   },
   tz: String,
   is_bot: Boolean,
-  is_admin: Boolean,
-  work_status: [{
-    date: Date,
-    status: String
-  }]
+  is_admin: Boolean
 });
 
 UserSchema.statics = {
@@ -35,39 +31,9 @@ UserSchema.statics = {
         .catch((err) => reject(err));
     });
   },
-  updateWhereabouts(userId, weekWhereabouts) {
+  findUser(name) {
     return new Promise((resolve, reject) => {
-      this.update({
-        user_id: userId
-      }, {
-        $pull: {
-          work_status: {
-            date: {
-              $gte: new Date().setHours(0, 0, 0, 0)
-            }
-          }
-        }
-      }).then(dataPulled => {
-        this.update({
-          user_id: userId
-        }, {
-          $push: {
-            work_status: {
-              $each: weekWhereabouts
-
-            }
-          }
-        }, {
-          upsert: true
-        }).then((data) => resolve(data)).catch((err) => reject(err));
-      }).catch(errorPulled => {
-        console.log("ERROR DURING PULLALL", errorPulled);
-      });
-    });
-  },
-  findStatus(name) {
-    return new Promise((resolve, reject) => {
-      this.find({
+      this.findOne({
         name: name
       }).then(data => {
         return resolve(data);
@@ -76,6 +42,7 @@ UserSchema.statics = {
       });
     });
   },
+  // updateWhereabouts
   updateTodaysStatus(userId, today, newStatus) {
     return new Promise((resolve, reject) => {
       this.update({
