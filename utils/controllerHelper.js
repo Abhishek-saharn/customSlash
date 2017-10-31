@@ -11,11 +11,10 @@ import {
 import {
   gtoken
 } from "../controllers/commands.controller";
-
 /**
  * getMemberStatus will help in fetching member's status( on site, offsite, off) from database.
  */
-export function getMemberStatus(userId, textArr, channelId, responseUrl) {
+export function getMemberStatus(userId, teamId, textArr, channelId, responseUrl) {
   if (/^\d+$/.test(textArr[0])) {
     postMessageError(gtoken, channelId);
     return;
@@ -24,14 +23,19 @@ export function getMemberStatus(userId, textArr, channelId, responseUrl) {
 
   let status;
   console.log(textArr);
+/**
+ * To get Status of a member, userid of that user will be required.
+ * This can be fetched from database once we get a entered username.
+ * Here userId fetched by username and to get the status of present date
+ * we can compare a date between previous and next date.
+ */
 
-  Users.findUser(correctedText).then(data => {
+  Users.findUser(correctedText, teamId).then(data => {
     const dayBefore = moment().subtract(1, "days").hour(23).minute(59);
     const datyAfter = moment().add(1, "days").hour(0).minute(0);
 
-    console.log("THESE ARE<<<<DDAATTAA>>>>> BEFORE AND AFTER DATES ", data, dayBefore, datyAfter);
-
-    WorkStatus.findStatus(data.user_id, dayBefore, datyAfter).then(dataStatus => {
+    console.log("THESE ARE<<<<DDAATTAA>>>>> BEFORE AND AFTER DATES ", data.user_team_id, dayBefore, datyAfter);
+    WorkStatus.findStatus(data.user_id, data.user_team_id, dayBefore, datyAfter).then(dataStatus => {
       status = dataStatus.status;
       let dataToPass = {
         // response_type: "in_channel", // public to the channel
@@ -52,7 +56,7 @@ export function getMemberStatus(userId, textArr, channelId, responseUrl) {
  * This will help mempers to update their weekly status.
  */
 
-export function updateWhereabouts(userId, codeString, channelId, responseUrl) {
+export function updateWhereabouts(userId, teamId, codeString, channelId, responseUrl) {
   const codeArr = codeString.split("");
   const mom = moment();
   const weekWhereabouts = [];
@@ -60,16 +64,16 @@ export function updateWhereabouts(userId, codeString, channelId, responseUrl) {
 
   codeArr.forEach((code) => {
     const d = new Date(mom);
-    // d.setHours(0, 0, 0, 0);
     const dayObj = {
       user_id: userId,
+      user_team_id: teamId,
       date: d,
       status: workCodes[code]
     };
     mom.add(1, "days");
     weekWhereabouts.push(dayObj);
   });
-  WorkStatus.updateWhereabouts(userId, weekWhereabouts)
+  WorkStatus.updateWhereabouts(userId, teamId, weekWhereabouts)
     .then(() => {
       const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       let str = "Your next weeks whereabouts have been logged as follows:\n";
@@ -95,7 +99,7 @@ export function updateWhereabouts(userId, codeString, channelId, responseUrl) {
 /**
  * showWhereaboutCodes will show the codes that can be used in updating whereabout codes.
  */
-export function showWhereaboutCodes(userId, channelId, responseUrl) {
+export function showWhereaboutCodes(userId, teamId, channelId, responseUrl) {
   let str = "Follow codes below:";
   Object.keys(workCodes).forEach(key => {
     str = `${str}\n${key} - ${workCodes[key]}`;
@@ -109,14 +113,14 @@ export function showWhereaboutCodes(userId, channelId, responseUrl) {
   displayMessage(responseUrl, message);
 }
 
-export function updateTodaysStatus(userId, code, channelId, responseUrl) {
+export function updateTodaysStatus(userId, teamId, code, channelId, responseUrl) {
   const today = new Date(moment().format());
   // today.setHours(0, 0, 0, 0);
   const dayBefore = moment().subtract(1, "days").hour(23).minute(59);
   const datyAfter = moment().add(1, "days").hour(0).minute(0);
 
   const newStatus = workCodes[code];
-  WorkStatus.updateTodaysStatus(userId, today, newStatus, dayBefore, datyAfter)
+  WorkStatus.updateTodaysStatus(userId, teamId, today, newStatus, dayBefore, datyAfter)
     .then(data => {
       if (data.nModified === 1) {
         const str = `<@${userId}> changed status to ${newStatus}`;
@@ -133,6 +137,7 @@ export function updateTodaysStatus(userId, code, channelId, responseUrl) {
 
         const wabt = {
           user_id: userId,
+          user_team_id: teamId,
           date: today,
           status: newStatus
         };

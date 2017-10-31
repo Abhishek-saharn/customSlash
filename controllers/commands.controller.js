@@ -49,18 +49,27 @@ export const slashHome = (req, res) => {
       });
     }
     if (textArr.length === 1) {
-      getMemberStatus(userId, textArr, req.body.channel_id, req.body.response_url);
-    } else if (textArr.length === 2 &&
-      textArr[0] === "whereabouts") {
-      if (/^[0-9]+$/.test(textArr[1])) {
-        updateWhereabouts(userId, textArr[1], req.body.channel_id, req.body.response_url);
-      } else if (textArr[1] === "codes") {
-        showWhereaboutCodes(userId, req.body.channel_id, req.body.response_url);
-      }
-    } else if (textArr[0] === "update" && textArr[1] === "status" && /^[1-6]$/.test(textArr[2])) {
-      updateTodaysStatus(userId, textArr[2], req.body.channel_id, req.body.response_url);
+      getMemberStatus(userId, teamId, textArr, req.body.channel_id, req.body.response_url);
     } else {
-      postMessageError(gtoken, req.body.channel_id);
+      switch (textArr[0]) {
+      case "whereabouts":
+
+        if (/^[0-9]+$/.test(textArr[1])) {
+          updateWhereabouts(userId, teamId, textArr[1], req.body.channel_id, req.body.response_url);
+        } else if (textArr[1] === "codes") {
+          showWhereaboutCodes(userId, teamId, req.body.channel_id, req.body.response_url);
+        }
+
+        break;
+      case "update":
+        if (textArr[1] === "status" && /^[1-6]$/.test(textArr[2])) {
+          updateTodaysStatus(userId, teamId, textArr[2], req.body.channel_id, req.body.response_url);
+        }
+        break;
+      default:
+        postMessageError(gtoken, req.body.channel_id);
+        break;
+      }
     }
   }
 };

@@ -7,6 +7,7 @@ const StatusTimeMachineSchema = new Schema({
     type: String,
     unique: false
   },
+  user_team_id: String,
   date: Date,
   status: String
 });

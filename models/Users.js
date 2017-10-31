@@ -31,10 +31,11 @@ UserSchema.statics = {
         .catch((err) => reject(err));
     });
   },
-  findUser(name) {
+  findUser(name, teamId) {
     return new Promise((resolve, reject) => {
       this.findOne({
-        name: name
+        name: name,
+        user_team_id: teamId
       }).then(data => {
         return resolve(data);
       }).catch(err => {

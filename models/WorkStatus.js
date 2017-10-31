@@ -7,15 +7,17 @@ const WorkStatusSchema = new Schema({
     type: String,
     unique: false
   },
+  user_team_id: String,
   date: Date,
   status: String
 });
 WorkStatusSchema.statics = {
-  updateWhereabouts(userId, weekWhereabouts) {
+  updateWhereabouts(userId, teamId, weekWhereabouts) {
     return new Promise((resolve, reject) => {
       try {
         this.deleteMany({
           user_id: userId,
+          user_team_id: teamId,
           date: {
             $gte: new Date().setHours(0, 0, 0, 0)
           }
@@ -30,6 +32,8 @@ WorkStatusSchema.statics = {
                   console.log("HERE WE GOT ERROR IN insertMany>>", err);
                   return reject(err);
                 });
+            } else {
+              return reject(new Error("There is some error!"));
             }
           })
           .catch(deleteManyError => {
@@ -41,10 +45,11 @@ WorkStatusSchema.statics = {
       }
     });
   },
-  findStatus(userId, dayBefore, dayAfter) {
+  findStatus(userId, teamId, dayBefore, dayAfter) {
     return new Promise((resolve, reject) => {
       this.findOne({
         user_id: userId,
+        user_team_id: teamId,
         date: {
           $gt: dayBefore,
           $lt: dayAfter
@@ -56,10 +61,11 @@ WorkStatusSchema.statics = {
       });
     });
   },
-  updateTodaysStatus(userId, today, newStatus, dayBefore, dayAfter) {
+  updateTodaysStatus(userId, teamId, today, newStatus, dayBefore, dayAfter) {
     return new Promise((resolve, reject) => {
       this.update({
         user_id: userId,
+        user_team_id: teamId,
         date: {
           $gt: dayBefore,
           $lt: dayAfter

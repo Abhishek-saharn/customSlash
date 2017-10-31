@@ -24,6 +24,8 @@ export function postMessage(message, token, channel, att = [{}]) {
     token: token,
     channel: channel,
     text: message,
+    as_user: false,
+    username: "pinpoint",
     attachments: JSON.stringify(att)
   };
   const qs = queryString.stringify(dataToPassed);
