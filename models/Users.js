@@ -8,14 +8,19 @@ const UserSchema = new Schema({
   user_team_id: String,
   name: String,
   email: {
-    type: String,
-    unique: true
+    type: String
   },
   tz: String,
   is_bot: Boolean,
   is_admin: Boolean
 });
-
+UserSchema.index({
+  user_id: 1,
+  user_team_id: 1,
+  email: 1
+}, {
+  unique: true
+});
 UserSchema.statics = {
   insertUser(user) {
     return new Promise((resolve, reject) => {

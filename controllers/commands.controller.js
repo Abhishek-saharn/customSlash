@@ -1,206 +1,161 @@
 import request from "request";
 
-import {
-  updateWhereabouts,
-  getMemberStatus,
-  showWhereaboutCodes,
-  updateTodaysStatus
-} from "../utils/controllerHelper";
-import {
-  displayMessage,
-  postMessage,
-  postMessageError
-} from "../utils/misc";
+import controllerHelper from "./controllerHelper.js";
+import responseHelper from "../utils/responseHelper";
+
+import slackAuthHelpers from "../utils/slackAuthHelper";
 
 import Teams from "../models/Teams";
-import Users from "../models/Users";
+const commandsControllers = {
+  /**
+   *  "index.html" contains a button that will let users authorize / commands. After clicking button
+   *  an auth page will be shown to user, that will redirect to route "/slack" this same route is
+   *  also provided in slack app "Oauth" url .
+   * @param {*Object} req
+   * @param {*Object} res
+   */
+  indexButton(req, res) {
+    res.sendFile(`${process.env.PWD}/public/ui/index.html`);
+  },
+  /**
+   *
+   * @param {*Object} req -req will contain data about command, text, channel, user etc.
+   * @param {*Object} res
+   */
+  slashHome(req, res) {
+    res.status(200).end();
 
-/**
- *  "index.html" contains a button that will let users authorize / commands. After clicking button
- *  an auth page will be shown to user, that will redirect to route "/slack" this same route is
- *  also provided in slack app "Oauth" url .
- */
-
-export let gtoken = null;
-
-export const indexButton = (req, res) => {
-  res.sendFile(`${process.env.PWD}/ui/index.html`);
-};
-
-export const slashHome = (req, res) => {
-  res.status(200).end();
-
-  if (req.body.token !== process.env.SLACK_VERIFICATION_TOKEN) {
-    res.status(403).end("ACCESS FORBIDDEN");
-  } else {
     const text = (req.body.text).toLowerCase();
     const textArr = text.trim().split(" ");
 
     const teamId = req.body.team_id;
     const userId = req.body.user_id;
+    const channelId = req.body.channel_id;
+    const responseUrl = req.body.response_url;
+    const accessToken = req.access_token;
 
-
-    if (gtoken === null || gtoken === undefined) {
-      Teams.find(teamId).then(accessToken => {
-        gtoken = accessToken;
-        console.log("GOT THE TOKEN ", teamId, accessToken);
-      }).catch(error => {
-        console.log("HERE WE GOT THE ERROR WHILE GETTING ACCESS TOKEN", error);
-      });
-    }
-    if (textArr.length === 1) {
-      getMemberStatus(userId, teamId, textArr, req.body.channel_id, req.body.response_url);
+    const reqData = {
+      userId: userId,
+      teamId: teamId,
+      accessToken: accessToken,
+      channelId: channelId,
+      responseUrl: responseUrl,
+      textArr: textArr
+    };
+    if (textArr.length === 1 && textArr[0].charAt(0) === "@") {
+      controllerHelper.getMemberStatus(reqData);
     } else {
       switch (textArr[0]) {
       case "whereabouts":
 
         if (/^[0-9]+$/.test(textArr[1])) {
-          updateWhereabouts(userId, teamId, textArr[1], req.body.channel_id, req.body.response_url);
+          controllerHelper.updateWhereabouts(reqData);
         } else if (textArr[1] === "codes") {
-          showWhereaboutCodes(userId, teamId, req.body.channel_id, req.body.response_url);
+          controllerHelper.showWhereaboutCodes(reqData);
+        } else {
+          responseHelper.postMessageError(accessToken, userId, channelId);
         }
 
         break;
       case "update":
         if (textArr[1] === "status" && /^[1-6]$/.test(textArr[2])) {
-          updateTodaysStatus(userId, teamId, textArr[2], req.body.channel_id, req.body.response_url);
+          controllerHelper.updateTodaysStatus(reqData);
         }
         break;
+      case "stats":
+        controllerHelper.getUserStats(reqData);
+        break;
+      case "help":
+        controllerHelper.getHelp(reqData);
+        break;
       default:
-        postMessageError(gtoken, req.body.channel_id);
+        responseHelper.postMessageError(reqData);
         break;
       }
     }
-  }
-};
+  },
 
-export const slackAuth = (req, res) => {
   /**
-   * access denied. This will check whether its first time or not,
-   * if 1st time. Then redirect to /index.
+   * @param {*Object} req -req will contain payload passed by install app button.
+   * @param {*Object} res
    */
-  if (!req.query.code) {
-    res.redirect("/index");
-    return;
-  }
-  /**
-   *   If authenticated by user, HTTP request will be having a 'code' as query that can be stored.
-   *   And the stored data will be exchanged with a token.
-   */
-  let data = {
-    form: {
-      client_id: process.env.SLACK_CLIENT_ID,
-      client_secret: process.env.SLACK_CLIENT_SECRET,
-      code: req.query.code
+  slackAuth(req, res) {
+    /**
+     * access denied. This will check whether its first time or not,
+     * if 1st time. Then redirect to /index.
+     */
+    if (!req.query.code) {
+      res.redirect("/index");
+      return;
     }
-  };
+    /*
+     *  Below data is POSTed to the oauth.access and a token is then stored.
+     */
+    slackAuthHelpers.oauthAccess(req.query.code)
+      .then(redirectLink => {
+        res.redirect(redirectLink);
+      })
+      .catch(oauthAccessError => {
+        console.log("ERROR GOT IN oauthAccessError>>>>", oauthAccessError);
+      });
+  },
   /**
-   *  Below data is POSTed to the oauth.access and a token is then stored.
-   */
-  request.post("https://slack.com/api/oauth.access", data, (error, response, body) => {
-    if (!error && response.statusCode === 200) {
-      // Get an auth token
-      const token = JSON.parse(body).access_token;
+   * approvedAction is required as it is used for menu functonality.
+   * */
+  approvedAction(req, res) {
+    res.status(200).end();
 
-      /**
-       * Get All the users and add them to Db.
-       */
-      let users = [];
-      request.post("https://slack.com/api/users.list", {
-        form: {
-          token: token
-        }
-      }, (err, responseUserList, bodyUserList) => {
-        const bodyJson = JSON.parse(bodyUserList);
-
-
-        const members = bodyJson.members;
-
-        members.forEach((user) => {
-          if (user.is_bot === true) return;
-
-
-          let userData = {
-            user_id: user.id,
-            user_team_id: user.team_id,
-            name: user.name,
-            email: user.profile.email,
-            tz: user.tz,
-            is_bot: user.is_bot,
-            is_admin: user.is_admin
-          };
-          users.push(userData);
-        });
-
-        Users.insertManyUsers(users).then().catch();
-      });
-
-
-      // Get the team domain name to redirect to the team URL after auth
-      request.post("https://slack.com/api/team.info", {
-        form: {
-          token: token
-        }
-      }, (errorTeamInfo, responseTeamInfo, bodyTeamInfo) => {
-        if (!errorTeamInfo && responseTeamInfo.statusCode === 200) {
-          if (JSON.parse(bodyTeamInfo).error === "missing_scope") {
-            // res.send("Bot added");
-          } else {
-            const teamId = JSON.parse(bodyTeamInfo).team.id;
-            const team = JSON.parse(bodyTeamInfo).team.domain;
-
-            const Teamdata = {
-              team_id: teamId,
-              team_domain: team,
-              token: token
-            };
-
-            Teams.insert(Teamdata)
-              .then((insertedData) => {
-                console.log("THIS DATA IS INSERTED", insertedData);
-              })
-              .catch((insertError) => {
-                console.log("HERE WE GOT ERROR WHILE INSERTING TEAMDATA ", insertError);
-              });
-
-
-            res.redirect("http://" + team + ".slack.com");
-          }
-        }
-      });
-    }
-  });
-};
-
-/**
- * approvedAction is not still required as it is just used for lerning Button functonality.
- * */
-
-export const approvedAction = (req, res) => {
-  res.status(200).end();
-
-
-  const payloadjson = JSON.parse(req.body.payload);
-
-  if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
-    res.status(403).end("ACCESS FORBIDDEN");
-  } else {
-    let attachmentsS = {
+    const payloadjson = JSON.parse(req.body.payload);
+    const accessToken = req.access_token;
+    console.log(">>>>>>>>>>>>>", payloadjson);
+    let attachmentsS = [{
       fallback: "Have you aprooved?",
-      title: "Thankyou for responding",
-      text: `You have just responded with a ${payloadjson.actions[0].value}`,
+      title: "",
+      text: `${payloadjson.actions[0].selected_options[0].value}`,
       callback_id: payloadjson.callback_id,
       color: "#3AA3E3",
+      mrkdwn_in: ["text"],
       attachment_type: "default",
       replace_original: true
 
-    };
+    }];
 
+    const channelId = payloadjson.channel.id;
+    responseHelper.postEphemeralMessage("", payloadjson.user.id, accessToken, channelId, attachmentsS);
+    // responseHelper.displayMessage(payloadjson.response_url, attachmentsS);
+  },
 
-    displayMessage(payloadjson.response_url, attachmentsS);
+  geoLocation(req, res) {
+    res.sendFile(`${process.env.PWD}/public/ui/geolocation.html`);
+  },
+
+  authUser(req, res, next) {
+    if (req.body.token !== process.env.SLACK_VERIFICATION_TOKEN) {
+      res.status(403).end("ACCESS FORBIDDEN");
+    } else {
+      const teamId = req.body.team_id;
+      Teams.find(teamId).then(accessToken => {
+        req.access_token = accessToken;
+        next();
+      }).catch(error => {
+        console.log("HERE WE GOT THE ERROR WHILE GETTING ACCESS TOKEN authUser", error);
+      });
+    }
+  },
+
+  authMenu(req, res, next) {
+    const payloadjson = JSON.parse(req.body.payload);
+    if (payloadjson.token !== process.env.SLACK_VERIFICATION_TOKEN) {
+      res.status(403).end("ACCESS FORBIDDEN");
+    } else {
+      const teamId = payloadjson.team.id;
+      Teams.find(teamId).then(accessToken => {
+        req.access_token = accessToken;
+        next();
+      }).catch(error => {
+        console.log("HERE WE GOT THE ERROR WHILE GETTING ACCESS TOKEN authMenu", error);
+      });
+    }
   }
 };
-
-export const geoLocation = (req, res) => {
-  res.sendFile(`${process.env.PWD}/ui/geolocation.html`);
-};
+export default commandsControllers;

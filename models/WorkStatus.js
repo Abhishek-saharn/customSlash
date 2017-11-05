@@ -11,6 +11,15 @@ const WorkStatusSchema = new Schema({
   date: Date,
   status: String
 });
+
+WorkStatusSchema.index({
+  user_id: 1,
+  user_team_id: 1,
+  date: 1
+}, {
+  unique: true
+});
+
 WorkStatusSchema.statics = {
   updateWhereabouts(userId, teamId, weekWhereabouts) {
     return new Promise((resolve, reject) => {
@@ -26,10 +35,13 @@ WorkStatusSchema.statics = {
             console.log("WORKING HEREEEEE TOOOOOOOOOOOOOOOO>>>>>>>>>>>>>>>>>.");
 
             if (deleteManyData.result.ok === 1) {
-              this.insertMany(weekWhereabouts)
+              this.insertMany(weekWhereabouts, {
+                ordered: false
+              })
                 .then((data) => resolve(data))
                 .catch((err) => {
                   console.log("HERE WE GOT ERROR IN insertMany>>", err);
+                  // if(err.errmsg === )
                   return reject(err);
                 });
             } else {
@@ -67,8 +79,8 @@ WorkStatusSchema.statics = {
         user_id: userId,
         user_team_id: teamId,
         date: {
-          $gt: dayBefore,
-          $lt: dayAfter
+          $gt: new Date(dayBefore),
+          $lt: new Date(dayAfter)
         }
       }, {
         $set: {
@@ -78,6 +90,33 @@ WorkStatusSchema.statics = {
       })
         .then(data => resolve(data))
         .catch(error => reject(error));
+    });
+  },
+  getUserStats(userId, teamId, startDate, endDate) {
+    return new Promise((resolve, reject) => {
+      this.aggregate([{
+        $match: {
+          user_id: userId,
+          user_team_id: teamId,
+          date: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+          }
+        }
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: {
+            $sum: 1
+          }
+        }
+      }
+      ]).then(data => {
+        return resolve(data);
+      }).catch(error => {
+        return reject(error);
+      });
     });
   }
 };

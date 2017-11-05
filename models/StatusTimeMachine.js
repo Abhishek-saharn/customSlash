@@ -11,7 +11,13 @@ const StatusTimeMachineSchema = new Schema({
   date: Date,
   status: String
 });
-
+StatusTimeMachineSchema.index({
+  user_id: 1,
+  user_team_id: 1,
+  date: 1
+}, {
+  unique: true
+});
 StatusTimeMachineSchema.statics = {
   insertwb(whereabouts) {
     return new Promise((resolve, reject) => {
