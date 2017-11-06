@@ -1,10 +1,6 @@
-import request from "request";
-
 import controllerHelper from "./controllerHelper.js";
 import responseHelper from "../utils/responseHelper";
-
 import slackAuthHelpers from "../utils/slackAuthHelper";
-
 import Teams from "../models/Teams";
 const commandsControllers = {
   /**
@@ -43,30 +39,75 @@ const commandsControllers = {
       textArr: textArr
     };
     if (textArr.length === 1 && textArr[0].charAt(0) === "@") {
-      controllerHelper.getMemberStatus(reqData);
+      controllerHelper.getMemberStatus(reqData)
+        .then(statusDataToPass => {
+          responseHelper.displayMessage(responseUrl, statusDataToPass);
+        })
+        .catch(statusDataToPassError => {
+          console.log("Here we got error in getting status of user: ", statusDataToPassError);
+          responseHelper.postMessageError(accessToken, userId, channelId, statusDataToPassError);
+        });
     } else {
       switch (textArr[0]) {
       case "whereabouts":
 
-        if (/^[0-9]+$/.test(textArr[1])) {
-          controllerHelper.updateWhereabouts(reqData);
-        } else if (textArr[1] === "codes") {
-          controllerHelper.showWhereaboutCodes(reqData);
+        if (/^[0-9]+$/.test(textArr[1]) && textArr.length === 2) {
+          controllerHelper.updateWhereabouts(reqData)
+            .then((message) => {
+              responseHelper.displayMessage(responseUrl, message);
+            })
+            .catch((updateWhereaboutsError => {
+              console.log("GOT ERROR WHILE DISPLAYING", updateWhereaboutsError);
+              responseHelper.postMessageError(access_token, user_id, channelId);
+            }));
+        } else if (textArr[1] === "codes" && textArr.length === 2) {
+          controllerHelper.showWhereaboutCodes(reqData)
+            .then((message) => {
+              responseHelper.displayMessage(responseUrl, message);
+            })
+            .catch();
         } else {
           responseHelper.postMessageError(accessToken, userId, channelId);
         }
 
         break;
       case "update":
-        if (textArr[1] === "status" && /^[1-6]$/.test(textArr[2])) {
-          controllerHelper.updateTodaysStatus(reqData);
+        if (textArr[1] === "status" && /^[1-6]$/.test(textArr[2]) && textArr.length === 3) {
+          controllerHelper.updateTodaysStatus(reqData)
+            .then(updateToday => {
+              responseHelper.postMessage("", accessToken, "#general", updateToday.chchannelAttachment);
+              responseHelper.displayMessage(responseUrl, updateToday.personalMessage);
+            })
+            .catch(updateTodayError => {
+              responseHelper.postMessageError(accessToken, userId, channelId, updateTodayError);
+            });
+        } else {
+          responseHelper.postMessageError(accessToken, userId, channelId);
         }
         break;
       case "stats":
-        controllerHelper.getUserStats(reqData);
+        if(textArr.length === 4) {
+          controllerHelper.getUserStats(reqData)
+            .then(message => {
+              responseHelper.displayMessage(responseUrl, message);
+            })
+            .catch((statsErrorMessage)=>{
+              responseHelper.postMessageError(accessToken, userId, channelId, statsErrorMessage);
+            });
+        } else {
+          responseHelper.postMessageError(accessToken, userId, channelId);
+        }
         break;
       case "help":
-        controllerHelper.getHelp(reqData);
+        if (textArr.length === 1) {
+          controllerHelper.getHelp()
+            .then(helpData => {
+              responseHelper.postEphemeralMessage(helpData.str, accessToken, userId, channelId, helpData.att);
+            })
+            .catch();
+        }else {
+          responseHelper.postMessageError(accessToken, userId, channelId);
+        }
         break;
       default:
         responseHelper.postMessageError(reqData);
@@ -74,7 +115,6 @@ const commandsControllers = {
       }
     }
   },
-
   /**
    * @param {*Object} req -req will contain payload passed by install app button.
    * @param {*Object} res
@@ -107,7 +147,6 @@ const commandsControllers = {
 
     const payloadjson = JSON.parse(req.body.payload);
     const accessToken = req.access_token;
-    console.log(">>>>>>>>>>>>>", payloadjson);
     let attachmentsS = [{
       fallback: "Have you aprooved?",
       title: "",
@@ -121,8 +160,7 @@ const commandsControllers = {
     }];
 
     const channelId = payloadjson.channel.id;
-    responseHelper.postEphemeralMessage("", payloadjson.user.id, accessToken, channelId, attachmentsS);
-    // responseHelper.displayMessage(payloadjson.response_url, attachmentsS);
+    responseHelper.postEphemeralMessage("", accessToken, payloadjson.user.id, channelId, attachmentsS);
   },
 
   geoLocation(req, res) {

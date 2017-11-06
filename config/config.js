@@ -8,4 +8,3 @@ export default {
     }
   }
 };
-// mongodb://<dbuser>:<dbpassword>@ds019658.mlab.com:19658/slashpinpoint

@@ -28,7 +28,8 @@ const responseHelper = {
     const qs = queryString.stringify(dataToPassed);
     request.post(`https://slack.com/api/chat.postMessage?${qs}`, (err, reqa, resa) => {});
   },
-  postEphemeralMessage(message, userId, token, channel, att = [{}]) {
+  
+  postEphemeralMessage(message, token, userId, channel, att = [{}]) {
     const dataToPassed = {
       token: token,
       channel: channel,
@@ -41,6 +42,7 @@ const responseHelper = {
     const qs = queryString.stringify(dataToPassed);
     request.post(`https://slack.com/api/chat.postEphemeral?${qs}`, (err, reqa, resa) => {});
   },
+
   postMessageError(token, userId, channel, customText = null) {
     const text = "Sorry! Somthing went wrong. Did you enterd correct inputs?\n Try `/pinpoint help` .";
     const textToPass = (customText === null) ? text : customText;
