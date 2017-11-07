@@ -99,7 +99,7 @@ define({ "api": [
     "error": {
       "examples": [
         {
-          "title": "Authentication error",
+          "title": "Internal error",
           "content": "HTTP/1.1 500 Internal Server Error",
           "type": "json"
         }
@@ -109,5 +109,165 @@ define({ "api": [
     "filename": "./routes/commands.routes.js",
     "groupTitle": "commands",
     "name": "PostPinpoint"
+  },
+  {
+    "type": "get",
+    "url": "/index",
+    "title": "When user visit installation page.",
+    "group": "installation",
+    "description": "<p>This api will be used for serving an html index page that which later invoke &quot;salckAuth&quot; api.</p>",
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Internal error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./routes/commands.routes.js",
+    "groupTitle": "installation",
+    "name": "GetIndex"
+  },
+  {
+    "type": "get",
+    "url": "/slackAuth",
+    "title": "Invokes on first time installation.",
+    "group": "installation",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "code",
+            "description": "<p>code GET parameter will be used for a temporary authorization.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n  \"code\"=\"gIkuvaNzQIHg97ATvDxqgjtO\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Internal error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./routes/commands.routes.js",
+    "groupTitle": "installation",
+    "name": "GetSlackauth"
+  },
+  {
+    "type": "post",
+    "url": "/approvedAction",
+    "title": "Handles all requests coming by interacting with interative buttons/Message-menus.",
+    "group": "interactiveActions",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token for verification of command invocation.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "actions",
+            "description": "<p>Action field contains name of the interective element eg: message-menu and &quot;selected value&quot;, the option user selects.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "team",
+            "description": "<p>team field encapsulates _id and domain containing info about id and Team name respectively, where command executed.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "user",
+            "description": "<p>User information like id and name who executed the command is in user field.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "channel",
+            "description": "<p>Channel name and id where slash command is executed contained by Channel field.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "response_url",
+            "description": "<p>It is the Url which can be used for send response back. With this approach, you can respond to a user's command up to 5 times within 30 minutes of the command's invocation.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Input",
+          "content": "{\n     \"actions\": [\n         {\n             \"name\": \"games_list\",\n             \"selected_options\": [\n                 {\n                     \"value\": \"maze\"\n                 }\n             ]\n         }\n     ],\n     \"team\": {\n         \"id\": \"T012AB0A1\",\n         \"domain\": \"pocket-calculator\"\n     },\n     \"channel\": {\n         \"id\": \"C012AB3CD\",\n         \"name\": \"general\"\n     },\n     \"user\": {\n         \"id\": \"U012A1BCD\",\n         \"name\": \"muzik\"\n     },\n     \"token\": \"verification_token_string\",\n     \"response_url\": \"https://hooks.slack.com/actions/T012AB0A1/1234567890/JpmK0yzoZ5eRiqfeduTBYXWQ\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success",
+          "content": "HTTP/1.1 200 OK\n{\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Internal error",
+          "content": "HTTP/1.1 500 Internal Server Error",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./routes/commands.routes.js",
+    "groupTitle": "interactiveActions",
+    "name": "PostApprovedaction"
   }
 ] });
