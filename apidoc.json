@@ -1,7 +1,7 @@
 {
-  "name": "Task API documentation",
+  "name": "Pinpoint API documentation",
   "version": "1.0.0",
-  "description": "API task list manager",
+  "description": "APIs below are used for handling HTTP requests",
   "template": {
       "forceLanguage": "en"
   },

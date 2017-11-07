@@ -91,13 +91,28 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n}",
+          "content": "HTTP/1.1 200 OK",
           "type": "json"
         }
       ]
     },
     "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotAuthorize",
+            "description": "<p>Whenever any request doesnot have a valid token</p>"
+          }
+        ]
+      },
       "examples": [
+        {
+          "title": "Authentication error",
+          "content": "HTTP/1.1 403 ACCESS FORBIDDEN",
+          "type": "json"
+        },
         {
           "title": "Internal error",
           "content": "HTTP/1.1 500 Internal Server Error",
@@ -105,7 +120,7 @@ define({ "api": [
         }
       ]
     },
-    "version": "0.0.0",
+    "version": "1.0.0",
     "filename": "./routes/commands.routes.js",
     "groupTitle": "commands",
     "name": "PostPinpoint"
@@ -134,7 +149,7 @@ define({ "api": [
         }
       ]
     },
-    "version": "0.0.0",
+    "version": "1.0.0",
     "filename": "./routes/commands.routes.js",
     "groupTitle": "installation",
     "name": "GetIndex"
@@ -182,7 +197,7 @@ define({ "api": [
         }
       ]
     },
-    "version": "0.0.0",
+    "version": "1.0.0",
     "filename": "./routes/commands.routes.js",
     "groupTitle": "installation",
     "name": "GetSlackauth"
@@ -190,7 +205,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/approvedAction",
-    "title": "Handles all requests coming by interacting with interative buttons/Message-menus.",
+    "title": "Handles all requests coming by using interative Components.",
     "group": "interactiveActions",
     "parameter": {
       "fields": {
@@ -251,13 +266,28 @@ define({ "api": [
       "examples": [
         {
           "title": "Success",
-          "content": "HTTP/1.1 200 OK\n{\n}",
+          "content": "HTTP/1.1 200 OK",
           "type": "json"
         }
       ]
     },
     "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotAuthorize",
+            "description": "<p>Whenever any request doesnot have a valid token</p>"
+          }
+        ]
+      },
       "examples": [
+        {
+          "title": "Authentication error",
+          "content": "HTTP/1.1 403 ACCESS FORBIDDEN",
+          "type": "json"
+        },
         {
           "title": "Internal error",
           "content": "HTTP/1.1 500 Internal Server Error",
@@ -265,7 +295,7 @@ define({ "api": [
         }
       ]
     },
-    "version": "0.0.0",
+    "version": "1.0.0",
     "filename": "./routes/commands.routes.js",
     "groupTitle": "interactiveActions",
     "name": "PostApprovedaction"

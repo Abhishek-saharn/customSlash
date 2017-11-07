@@ -1,7 +1,7 @@
 {
-  "name": "Task API documentation",
+  "name": "Pinpoint API documentation",
   "version": "1.0.0",
-  "description": "API task list manager",
+  "description": "APIs below are used for handling HTTP requests",
   "template": {
     "forceLanguage": "en"
   },
@@ -11,7 +11,7 @@
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2017-11-07T10:41:59.596Z",
+    "time": "2017-11-07T11:16:29.153Z",
     "url": "http://apidocjs.com",
     "version": "0.17.6"
   }

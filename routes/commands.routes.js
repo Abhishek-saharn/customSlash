@@ -28,10 +28,12 @@ const router = new Router();
  *  }
  *@apiSuccessExample {json} Success
  *  HTTP/1.1 200 OK
- *  {
- *  }
+ *@apiError UserNotAuthorize Whenever any request doesnot have a valid token
+ *@apiErrorExample {json} Authentication error
+ *  HTTP/1.1 403 ACCESS FORBIDDEN
  *@apiErrorExample {json} Internal error
  *  HTTP/1.1 500 Internal Server Error
+ *@apiVersion 1.0.0
  */
 router.route("/pinpoint")
   .post(commandsControllers.authUser, commandsControllers.slashHome);
@@ -48,6 +50,7 @@ router.route("/pinpoint")
  *  HTTP/1.1 200 OK
  *@apiErrorExample {json} Internal error
  *  HTTP/1.1 500 Internal Server Error
+ *@apiVersion 1.0.0
  */
 router.route("/slackAuth")
   .get(commandsControllers.slackAuth);
@@ -64,15 +67,13 @@ router.route("/slackAuth")
  *  HTTP/1.1 200 OK
  *@apiErrorExample {json} Internal error
  *  HTTP/1.1 500 Internal Server Error
+ *@apiVersion 1.0.0
  */
 router.route("/index")
   .get(commandsControllers.indexButton);
 
 /**
- * Only used for learning purpose of interactive buttons and their functionality.
- */
-/**
- *@api {post} /approvedAction Handles all requests coming by interacting with interative buttons/Message-menus.
+ *@api {post} /approvedAction Handles all requests coming by using interative Components.
  *@apiGroup interactiveActions
  *@apiParam {String} token Token for verification of command invocation.
  *@apiParam {String} actions Action field contains name of the interective element eg: message-menu and "selected value", the option user selects.
@@ -111,10 +112,12 @@ router.route("/index")
  *  }
  *@apiSuccessExample {json} Success
  *  HTTP/1.1 200 OK
- *  {
- *  }
+ *@apiError UserNotAuthorize Whenever any request doesnot have a valid token
+ *@apiErrorExample {json} Authentication error
+ *  HTTP/1.1 403 ACCESS FORBIDDEN
  *@apiErrorExample {json} Internal error
  *  HTTP/1.1 500 Internal Server Error
+ *@apiVersion 1.0.0
  */
 router.route("/approvedAction")
   .post(commandsControllers.authMenu, commandsControllers.approvedAction);

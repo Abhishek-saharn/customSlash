@@ -114,7 +114,6 @@ const commandsControllers = {
       }
     }
   },
- 
   slackAuth(req, res) {
     /**
      * access denied. This will check whether its first time or not,
