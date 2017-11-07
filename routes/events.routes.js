@@ -1,13 +1,13 @@
-import Router from "express";
+// import Router from "express";
 
-import {
-  eventHandler
-} from "../controllers/events.controller.js";
+// import {
+//   eventHandler
+// } from "../controllers/events.controller.js";
 
-const router = new Router();
-
-
-router.route("/events").post(eventHandler);
+// const router = new Router();
 
 
-export default router;
+// router.route("/events").post(eventHandler);
+
+
+// export default router;

@@ -1,0 +1,9 @@
+{
+  "name": "Task API documentation",
+  "version": "1.0.0",
+  "description": "API task list manager",
+  "template": {
+      "forceLanguage": "en"
+  },
+  "url" : "https://slashpinpoint.herokuapp.com"
+}

@@ -7,16 +7,15 @@ const commandsControllers = {
    *  "index.html" contains a button that will let users authorize / commands. After clicking button
    *  an auth page will be shown to user, that will redirect to route "/slack" this same route is
    *  also provided in slack app "Oauth" url .
-   * @param {*Object} req
-   * @param {*Object} res
+   * {*Object} req
+   *  {*Object} res
    */
   indexButton(req, res) {
     res.sendFile(`${process.env.PWD}/public/ui/index.html`);
   },
   /**
    *
-   * @param {*Object} req -req will contain data about command, text, channel, user etc.
-   * @param {*Object} res
+   * {*Object} res
    */
   slashHome(req, res) {
     res.status(200).end();
@@ -115,10 +114,7 @@ const commandsControllers = {
       }
     }
   },
-  /**
-   * @param {*Object} req -req will contain payload passed by install app button.
-   * @param {*Object} res
-   */
+ 
   slackAuth(req, res) {
     /**
      * access denied. This will check whether its first time or not,
